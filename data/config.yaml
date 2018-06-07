@@ -13,3 +13,6 @@ owner: 151162710757867521
 
 # game the bot is playing
 game: "Ouija!"
+
+# Channel name that the bot should be watching.
+channel_name: "ouija"
