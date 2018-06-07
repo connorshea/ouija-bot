@@ -1,7 +1,7 @@
 # ouija-bot
 A Discord bot based on the subreddit [r/AskOuija](https://www.reddit.com/r/AskOuija/).
 
-TL;DR The bot will randomly open a Discord channel, e.g. #ouija. It will post an explanation message of how the game is played and then one random letter of the alphabet. The goal is for users to write out a word or phrase one letter at a time.
+TL;DR The bot will randomly open a Discord channel, e.g. `#ouija`. It will post an explanation message of how the game is played and then one random letter of the alphabet. The goal is for users to write out a word or phrase one letter at a time.
 
 ### Bot Duties
 
@@ -28,3 +28,7 @@ TL;DR The bot will randomly open a Discord channel, e.g. #ouija. It will post an
 - Make it possible for mods/admins to run the bot with a command which unlocks the channel and starts another round of Ouija?
 - Pinging to make sure the bot is online.
 - Safeguard to handle a case where the bot disconnects in the middle of a game?
+- Make an "AskOuija" mode where someone submits a question to the bot.
+  - This can be done in one of two ways:
+    - Have the bot start by asking for a question submission.
+    - Have the bot accept suggestions in another channel like `#bot-spam` and then post a message with a list of the questions. It then has people react to that message with number emoji and chooses the top-voted question.
