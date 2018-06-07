@@ -1,9 +1,9 @@
 ---
 # Discord API client ID
-client_id: 
+client_id: 454407396341841967
 
-# Discord API client token
-token: 
+# Discord API client token environment variable
+token_environment_variable: "DISCORD_TOKEN"
 
 # Command prefix
 prefix: "ouija!"
