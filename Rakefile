@@ -1,3 +1,5 @@
+require 'dotenv/tasks'
+
 task :install do
   sh 'bundle install --path vendor/bundle --binstubs'
 end

@@ -16,6 +16,7 @@ GEM
   specs:
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.4.0)
     event_emitter (0.2.6)
     ffi (1.9.25)
     http-accept (1.7.0)
@@ -47,6 +48,7 @@ PLATFORMS
 
 DEPENDENCIES
   discordrb!
+  dotenv (~> 2.4.0)
 
 BUNDLED WITH
    1.16.2

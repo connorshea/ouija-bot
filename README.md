@@ -34,3 +34,20 @@ The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
   - This can be done in one of two ways:
     - Have the bot start by asking for a question submission.
     - Have the bot accept suggestions in another channel like `#bot-spam` and then post a message with a list of the questions. It then has people react to that message with number emoji and chooses the top-voted question.
+
+## Development
+
+To start, you'll need Ruby.
+
+- `gem install bundler`
+- `bundle install` to install dependencies
+- Create a `.env` file and add an environmental variable called `DISCORD_TOKEN`.
+
+The `.env` file should look like this:
+
+```
+# Replace the random string of characters with your token (yes I invalidated this token, don't worry).
+DISCORD_TOKEN=NDU0NDA3Mzk2MzQxODQxOTY3.DftMXw.Scfd1sM2rEGWNSnbOquqcWmmnxY
+```
+
+- `rake` will start the bot and allow it to be interacted-with.

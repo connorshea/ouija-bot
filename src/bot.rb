@@ -2,6 +2,7 @@
 require 'discordrb'
 require 'ostruct'
 require 'yaml'
+require 'dotenv/load'
 
 # The main bot module.
 module Bot
