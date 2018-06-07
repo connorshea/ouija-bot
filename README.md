@@ -3,6 +3,8 @@ A Discord bot based on the subreddit [r/AskOuija](https://www.reddit.com/r/AskOu
 
 TL;DR The bot will randomly open a Discord channel, e.g. `#ouija`. It will post an explanation message of how the game is played and then one random letter of the alphabet. The goal is for users to write out a word or phrase one letter at a time.
 
+The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
+
 ### Bot Duties
 
 - Unlock a Discord channel.
