@@ -29,6 +29,7 @@ GEM
     opus-ruby (1.0.1)
       ffi
     pg (1.0.0)
+    rake (12.3.1)
     rbnacl (3.4.0)
       ffi
     rest-client (2.1.0.rc1)
@@ -52,6 +53,7 @@ DEPENDENCIES
   discordrb!
   dotenv (~> 2.4.0)
   pg (~> 1.0)
+  rake (~> 12.3)
   sequel (~> 5.9.0)
 
 BUNDLED WITH

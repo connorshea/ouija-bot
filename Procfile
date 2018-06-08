@@ -1,1 +1,1 @@
-worker: rake
+worker: bundle exec rake

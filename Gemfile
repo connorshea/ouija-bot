@@ -6,3 +6,4 @@ gem 'discordrb', github: "meew0/discordrb"
 gem 'dotenv', '~> 2.4.0'
 gem 'sequel', '~> 5.9.0'
 gem 'pg', '~> 1.0'
+gem 'rake', '~> 12.3'
