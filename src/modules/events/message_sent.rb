@@ -41,7 +41,7 @@ module Bot::DiscordEvents
 
       goodbye_string = "Goodbye detected! If you'd like the game to end here, react to the"\
         " Goodbye with :thumbsup:! If two thumbsup (excluding the person who sent Goodbye)"\
-        " aren't given in the next 60 seconds, the Goodbye will be deleted."
+        " aren't given in the next 30 seconds, the Goodbye will be deleted."
       goodbye_instructions_message = event.respond(goodbye_string)
 
       # TODO: Handle this with an Await.
@@ -52,7 +52,7 @@ module Bot::DiscordEvents
       #   end
       # end
 
-      while (Time.now - goodbye_timestamp < 60)
+      while (Time.now - goodbye_timestamp < 30)
         # puts "Waiting"
         sleep(10)
         # puts Time.now - goodbye_timestamp
@@ -70,7 +70,7 @@ module Bot::DiscordEvents
           end
         end
 
-        if valid_reactions >= 2
+        if valid_reactions >= 1
           @goodbye_success = true
         end
       end
@@ -82,7 +82,7 @@ module Bot::DiscordEvents
       else
         done_message = event.channel.send_message("Game over!")
         completed_message_array = []
-        event.channel.history(50).each do |message|
+        event.channel.history(50, goodbye_instructions_message.id).each do |message|
           if message.content.length == 1
             completed_message_array.unshift(message.content.upcase)
           elsif message.content == "Goodbye" && message.id != goodbye_message.id
