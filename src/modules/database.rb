@@ -7,7 +7,7 @@ module Bot
     Sequel.extension :migration
 
     # Connect to database
-    DB = Sequel.sqlite('ouijabot.db')
+    DB = Sequel.connect(ENV['DATABASE_URL'] || 'postgres://localhost/ouijabot')
 
     # Run migrations
     Sequel::Migrator.run(DB, 'src/modules/database/migrations')
