@@ -1,1 +1,1 @@
-web: rake
+worker: rake
