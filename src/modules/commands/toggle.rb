@@ -5,12 +5,23 @@ module Bot::DiscordCommands
     extend Discordrb::Commands::CommandContainer
 
     command(:enable, description: "Enables Ouija mode.") do |event|
-      Bot::Database::Settings.enabled = true
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(enabled: true)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, enabled: true)
+      end
       event.respond("Ouija mode is enabled.")
     end
 
     command(:disable, description: "Disables Ouija mode.") do |event|
-      Bot::Database::Settings.enabled = false
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(enabled: false)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, enabled: false)
+      end
+
       event.respond("Ouija mode is disabled.")
     end
   end

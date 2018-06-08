@@ -3,7 +3,7 @@ Sequel.migration do
     create_table(:settings) do
       primary_key :id
       TrueClass :enabled, default: true
-      Integer :guild_id, 
+      Integer :guild_id, unique: true
     end
   end
 
