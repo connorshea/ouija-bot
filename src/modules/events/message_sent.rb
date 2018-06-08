@@ -4,6 +4,13 @@ module Bot::DiscordEvents
   module MessageSent
     extend Discordrb::EventContainer
     message(in: Bot::CONFIG.channel_name) do |event|
+      # Create the settings variable
+      settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
+      # If the `enabled` setting is set to false, return early.
+      if !settings[:enabled]
+        return
+      end
+
       unless message_checks(event.message)
         # Delete the message
         event.message.delete
@@ -17,8 +24,7 @@ module Bot::DiscordEvents
         handle_goodbye(event)
       end
 
-      settings = Bot::Database::Settings.find(guild_id: event.server.id)
-      if settings.delete_all && event.message != "Goodbye"
+      if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all is enabled", 5)
         event.message.delete
       end
@@ -80,6 +86,7 @@ module Bot::DiscordEvents
         goodbye_instructions_message.delete
         goodbye_message.delete
         event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 5)
+        disable_delete_all(event)
       else
         done_message = event.channel.send_message("Game over!")
         completed_message_array = []
@@ -128,7 +135,7 @@ module Bot::DiscordEvents
       else
         Bot::Database::Settings.create(guild_id: event.server.id, delete_all: true)
       end
-      event.respond("Delete all mode is enabled.")
+      event.send_temporary_message("Delete all mode is enabled.", 5)
     end
 
     def self.disable_delete_all(event)
@@ -138,7 +145,7 @@ module Bot::DiscordEvents
       else
         Bot::Database::Settings.create(guild_id: event.server.id, delete_all: false)
       end
-      event.respond("Delete all mode is disabled.")
+      event.send_temporary_message("Delete all mode is disabled.", 5)
     end
   end
 end
