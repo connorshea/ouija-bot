@@ -1,4 +1,5 @@
 module Bot::DiscordCommands
+  # A command for printing meta information about the bot.
   module Info
     extend Discordrb::Commands::CommandContainer
 

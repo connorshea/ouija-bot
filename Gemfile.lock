@@ -14,6 +14,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    ast (2.4.0)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.4.0)
@@ -22,13 +23,19 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    jaro_winkler (1.5.1)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
+    parallel (1.12.1)
+    parser (2.5.1.0)
+      ast (~> 2.4.0)
     pg (1.0.0)
+    powerpack (0.1.1)
+    rainbow (3.0.0)
     rake (12.3.1)
     rbnacl (3.4.0)
       ffi
@@ -37,10 +44,20 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rubocop (0.57.1)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.5)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.9.0)
     sequel (5.9.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
+    unicode-display_width (1.4.0)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
@@ -54,6 +71,7 @@ DEPENDENCIES
   dotenv (~> 2.4.0)
   pg (~> 1.0)
   rake (~> 12.3)
+  rubocop (~> 0.57)
   sequel (~> 5.9.0)
 
 BUNDLED WITH

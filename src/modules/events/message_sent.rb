@@ -7,9 +7,7 @@ module Bot::DiscordEvents
       # Create the settings variable
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
       # If the `enabled` setting is set to false, return early.
-      if !settings[:enabled]
-        return
-      end
+      return unless settings[:enabled]
 
       unless message_checks(event.message)
         # Delete the message
@@ -20,9 +18,7 @@ module Bot::DiscordEvents
 
       check_for_successive_messages(event)
 
-      if event.message.content == "Goodbye"
-        handle_goodbye(event)
-      end
+      handle_goodbye(event) if event.message.content == "Goodbye"
 
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all is enabled", 5)
@@ -33,18 +29,18 @@ module Bot::DiscordEvents
     def self.check_for_successive_messages(event)
       # Check the last two messages in the channel
       last_two_messages = event.channel.history(2)
-      # If both messages have the same author, delete the second message
-      if last_two_messages[0].author == last_two_messages[1].author
-        # TODO: Fix this.
-        # Technically this has a bug which allows you to send one letter, then
-        # use a command, then send another letter, and be fine.
-        if message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
-          # Delete the message.
-          last_two_messages[0].delete
-          # Wait 5 seconds and then delete the warning message.
-          event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
-        end
-      end
+      # Exit unless both messages have the same author.
+      return unless last_two_messages[0].author == last_two_messages[1].author
+
+      # TODO: Fix this.
+      # Technically this has a bug which allows you to send one letter, then
+      # use a command, then send another letter, and be fine.
+      return unless message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
+
+      # Delete the message.
+      last_two_messages[0].delete
+      # Wait 5 seconds and then delete the warning message.
+      event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
     end
 
     def self.handle_goodbye(event)
@@ -59,7 +55,7 @@ module Bot::DiscordEvents
 
       enable_delete_all(event)
 
-      while (Time.now - goodbye_timestamp < 30)
+      while Time.now - goodbye_timestamp < 30
         # puts "Waiting"
         sleep(10)
         # puts Time.now - goodbye_timestamp
@@ -72,23 +68,13 @@ module Bot::DiscordEvents
       if reacted_with_thumbsup.length >= 2
         valid_reactions = 0
         reacted_with_thumbsup.each do |reaction|
-          unless goodbye_message.author == reaction
-            valid_reactions += 1
-          end
+          valid_reactions += 1 unless goodbye_message.author == reaction
         end
 
-        if valid_reactions >= 1
-          @goodbye_success = true
-        end
+        @goodbye_success = true if valid_reactions >= 1
       end
 
-      if !@goodbye_success
-        goodbye_instructions_message.delete
-        goodbye_message.delete
-        event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 5)
-        disable_delete_all(event)
-      else
-        done_message = event.channel.send_message("Game over!")
+      if @goodbye_success
         completed_message_array = []
         # Run through all the messages before the most recent Goodbye, until the last game's goodbye.
         event.channel.history(50, goodbye_instructions_message.id).each do |message|
@@ -102,6 +88,11 @@ module Bot::DiscordEvents
         disable_delete_all(event)
         goodbye_instructions_message.delete
         event.channel.send_message(completed_message_array.join)
+      else
+        goodbye_instructions_message.delete
+        goodbye_message.delete
+        event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 5)
+        disable_delete_all(event)
       end
     end
 

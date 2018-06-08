@@ -17,7 +17,7 @@ module Bot
   # The bot is created as a constant, so that you
   # can access the cache anywhere.
   BOT = Discordrb::Commands::CommandBot.new(client_id: CONFIG.client_id,
-                                            token: ENV["#{CONFIG.token_environment_variable}"],
+                                            token: ENV[CONFIG.token_environment_variable.to_s],
                                             prefix: CONFIG.prefix)
 
   # This class method wraps the module lazy-loading process of discordrb command

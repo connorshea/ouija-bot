@@ -1,4 +1,5 @@
 module Bot::DiscordCommands
+  # Commands for displaying and modifying bot settings.
   module Settings
     extend Discordrb::Commands::CommandContainer
 
