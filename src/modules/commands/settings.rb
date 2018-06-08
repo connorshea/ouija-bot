@@ -1,6 +1,4 @@
 module Bot::DiscordCommands
-  # Responds with "Pong!".
-  # This used to check if bot is alive
   module Settings
     extend Discordrb::Commands::CommandContainer
 
