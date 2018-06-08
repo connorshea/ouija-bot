@@ -1,6 +1,6 @@
 ---
 # Discord API client ID
-client_id: 454407396341841967
+client_id_environment_variable: "DISCORD_CLIENT_ID"
 
 # Discord API client token environment variable
 token_environment_variable: "DISCORD_TOKEN"

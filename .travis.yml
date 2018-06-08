@@ -1,6 +1,12 @@
 language: ruby
 rvm:
-- 2.5.1
+  - 2.5.1
+cache:
+  bundler: true
+  directories:
+    - vendor/bundle
+    - $HOME/.rvm/gems
+install:
+  - bundle install
 script:
- - bundle install
- - bundle exec rubocop
+  - bundle exec rubocop
