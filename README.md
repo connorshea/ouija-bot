@@ -41,7 +41,7 @@ To start, you'll need Ruby and Postgres.
 
 - `gem install bundler`
 - `bundle install` to install dependencies
-- Create a `.env` file and add an environmental variable called `DISCORD_TOKEN`.
+- Create a `.env` file and add environmental variables called `DISCORD_TOKEN` and `DISCORD_CLIENT_ID`.
 
 The `.env` file should look like this:
 
