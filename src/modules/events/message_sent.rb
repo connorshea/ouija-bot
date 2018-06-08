@@ -16,6 +16,12 @@ module Bot::DiscordEvents
       if event.message.content == "Goodbye"
         handle_goodbye(event)
       end
+
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings.delete_all && event.message != "Goodbye"
+        event.channel.send_temporary_message("Delete all is enabled", 5)
+        event.message.delete
+      end
     end
 
     def self.check_for_successive_messages(event)
@@ -39,18 +45,13 @@ module Bot::DiscordEvents
       goodbye_timestamp = event.timestamp
       goodbye_message_id = event.message.id
 
-      goodbye_string = "Goodbye detected! If you'd like the game to end here, react to the"\
-        " Goodbye with :thumbsup:! If two thumbsup (excluding the person who sent Goodbye)"\
-        " aren't given in the next 30 seconds, the Goodbye will be deleted."
+      goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
+        " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
+        " (excluding the person who sent Goodbye) aren't given in the next"\
+        " 30 seconds, the Goodbye will be deleted."
       goodbye_instructions_message = event.respond(goodbye_string)
 
-      # TODO: Handle this with an Await.
-      # message(in: Bot::CONFIG.channel_name) do |event|
-      #   unless event.message.author.current_bot?
-      #     event.message.delete
-      #     event.respond("No new submissions while we deliberate!")
-      #   end
-      # end
+      enable_delete_all(event)
 
       while (Time.now - goodbye_timestamp < 30)
         # puts "Waiting"
@@ -82,18 +83,19 @@ module Bot::DiscordEvents
       else
         done_message = event.channel.send_message("Game over!")
         completed_message_array = []
+        # Run through all the messages before the most recent Goodbye, until the last game's goodbye.
         event.channel.history(50, goodbye_instructions_message.id).each do |message|
           if message.content.length == 1
             completed_message_array.unshift(message.content.upcase)
-          elsif message.content == "Goodbye" && message.id != goodbye_message.id
+          elsif (message.content == "Goodbye" || message.content == "Game over!") && message.id != goodbye_message.id
             break
           end
         end
 
+        disable_delete_all(event)
         goodbye_instructions_message.delete
         event.channel.send_message(completed_message_array.join)
       end
-
     end
 
     # Returns true if the message is any of the following:
@@ -117,6 +119,26 @@ module Bot::DiscordEvents
         msg.content.length == 1 ||
         msg.content == "Goodbye"
       )
+    end
+
+    def self.enable_delete_all(event)
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(delete_all: true)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, delete_all: true)
+      end
+      event.respond("Delete all mode is enabled.")
+    end
+
+    def self.disable_delete_all(event)
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(delete_all: false)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, delete_all: false)
+      end
+      event.respond("Delete all mode is disabled.")
     end
   end
 end
