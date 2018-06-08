@@ -37,7 +37,7 @@ The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
 
 ## Development
 
-To start, you'll need Ruby.
+To start, you'll need Ruby and Postgres.
 
 - `gem install bundler`
 - `bundle install` to install dependencies
@@ -50,4 +50,5 @@ The `.env` file should look like this:
 DISCORD_TOKEN=NDU0NDA3Mzk2MzQxODQxOTY3.DftMXw.Scfd1sM2rEGWNSnbOquqcWmmnxY
 ```
 
+- Enter the postgres CLI with `psql` and run `CREATE DATABASE ouijabot;`, this should create the database.
 - `rake` will start the bot and allow it to be interacted-with.
