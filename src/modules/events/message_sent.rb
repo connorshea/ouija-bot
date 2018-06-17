@@ -39,7 +39,7 @@ module Bot::DiscordEvents
 
       # Delete the message.
       last_two_messages[0].delete
-      # Wait 5 seconds and then delete the warning message.
+      # Wait 3 seconds and then delete the warning message.
       event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
     end
 
@@ -57,7 +57,7 @@ module Bot::DiscordEvents
 
       while Time.now - goodbye_timestamp < 30
         # puts "Waiting"
-        sleep(10)
+        sleep(15)
         # puts Time.now - goodbye_timestamp
       end
 
@@ -71,7 +71,7 @@ module Bot::DiscordEvents
           valid_reactions += 1 unless goodbye_message.author == reaction
         end
 
-        @goodbye_success = true if valid_reactions >= 1
+        @goodbye_success = true if valid_reactions >= 2
       end
 
       if @goodbye_success
