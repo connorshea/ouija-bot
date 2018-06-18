@@ -30,12 +30,12 @@ module Bot::DiscordEvents
       # Check the last two messages in the channel
       last_two_messages = event.channel.history(2)
       # Exit unless both messages have the same author.
-      return last_two_messages[0].author == last_two_messages[1].author
+      return unless last_two_messages[0].author == last_two_messages[1].author
 
       # TODO: Fix this.
       # Technically this has a bug which allows you to send one letter, then
       # use a command, then send another letter, and be fine.
-      return message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
+      return unless message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
 
       # Delete the message.
       last_two_messages[0].delete
