@@ -77,10 +77,12 @@ module Bot::DiscordEvents
       if @goodbye_success
         completed_message_array = []
         # Run through all the messages before the most recent Goodbye, until the last game's goodbye.
-        event.channel.history(50, goodbye_instructions_message.id).each do |message|
+        event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
           if message.content.length == 1
             completed_message_array.unshift(message.content.upcase)
-          elsif (message.content == "Goodbye" || message.content == "Game over!") && message.id != goodbye_message.id
+          elsif (message.content == "Goodbye" || message.content == "Game over!") && message.id != goodbye_message.id 
+            break
+          elsif index == 100
             break
           end
         end
