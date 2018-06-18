@@ -12,7 +12,7 @@ module Bot::DiscordEvents
       unless message_checks(event.message)
         # Delete the message
         event.message.delete
-        # Wait 5 seconds and then delete the warning message.
+        # Wait 3 seconds and then delete the warning message.
         event.channel.send_temporary_message('Only one character messages or "Goodbye" are allowed.', 3)
       end
 
@@ -100,7 +100,7 @@ module Bot::DiscordEvents
         goodbye_instructions_message.delete
         # Just in case the Goodbye message was deleted before this, check for its existence first.
         goodbye_message.delete if goodbye_message
-        event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 5)
+        event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 15)
         disable_delete_all(event)
       end
     end
