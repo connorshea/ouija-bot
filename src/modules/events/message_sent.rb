@@ -9,6 +9,8 @@ module Bot::DiscordEvents
       # If the `enabled` setting is set to false, return early.
       return unless settings[:enabled]
 
+      # If the message fails the message checks, delete the message and send
+      # a warning.
       unless message_checks(event.message)
         # Delete the message
         event.message.delete
@@ -16,31 +18,82 @@ module Bot::DiscordEvents
         event.channel.send_temporary_message('Only one character messages or "Goodbye" are allowed.', 3)
       end
 
-      check_for_successive_messages(event)
+      successive_messages = check_for_successive_messages(event)
 
       if settings[:delete_all] && !event.message.author.current_bot?
-        event.channel.send_temporary_message("Delete all is enabled", 5)
+        event.channel.send_temporary_message("Delete all mode is enabled.", 5)
         event.message.delete
       end
 
-      handle_goodbye(event) if event.message.content.capitalize == "Goodbye"
+      # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
+      # successive message from the same user.
+      disable_goodbye_handling = successive_messages || settings[:delete_all]
+
+      # Handle goodbye if there's a "Goodbye" message and goodbye handling isn't disabled.
+      handle_goodbye(event) if event.message.content.capitalize == "Goodbye" && !disable_goodbye_handling
     end
 
     def self.check_for_successive_messages(event)
-      # Check the last two messages in the channel
-      last_two_messages = event.channel.history(2)
-      # Exit unless both messages have the same author.
-      return unless last_two_messages[0].author == last_two_messages[1].author
+      # Check the last five messages before the event message.
+      last_five_messages = event.channel.history(5, event.message.id)
 
-      # TODO: Fix this.
-      # Technically this has a bug which allows you to send one letter, then
-      # use a command, then send another letter, and be fine.
-      return unless message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
+      @should_delete_message = false
 
-      # Delete the message.
-      last_two_messages[0].delete
-      # Wait 3 seconds and then delete the warning message.
-      event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
+      # Iterate through the last 5 messages prior to this event.message.
+      # We want to iterate through until we either find a message that
+      # suggests that the user has submitted a duplicate entry, or until
+      # we find a message that suggests the user has not.
+      #
+      # Technically this only checks the last 5 messages, and therefore
+      # it's possible to abuse this limit and just make the bot send 5
+      # messages or something, but it's not that important.
+      #
+      # This loop checks each message for these things in the following order:
+      # - If the event message is invalid, break and exit the loop.
+      # - If the message is from the bot, ignore it and continue.
+      # - If the message is from another user and that message
+      #   is a valid submission, exit the loop.
+      # - If the message is from the same user but is an invalid submission,
+      #   skip to the next message.
+      # - If the message is from the same user as the event.message, exit the
+      #   loop and set @should_delete_message to true.
+      last_five_messages.each do |message|
+        # Break unless the event message is valid.
+        # If it's not valid, we can break because that means they either used a
+        # command or something invalid that will be deleted by the event handler.
+        break unless message_checks_inputs(event.message)
+
+        # Skip to the next message if the message is from ouija-bot.
+        next if message.author.current_bot?
+
+        # If the author of the event message and the current message are not
+        # the same, check if the message from another user is a valid submission.
+        # If it is, we can break. If not, we have to continue.
+        break if event.message.author != message.author && message_checks_inputs(message)
+
+        # If the author of the event message and the current message are the same,
+        # but the current message is invalid, skip to the next message.
+        next if event.message.author == message.author && !message_checks_inputs(message)
+
+        # Break if Goodbye. This suggests a new game started.
+        break if message.content.capitalize == "Goodbye"
+
+        # Check if the author of this message is the same as the author of
+        # the event.message.
+        if event.message.author == message.author
+          @should_delete_message = true
+          break
+        end
+      end
+
+      if @should_delete_message
+        # Delete the message.
+        event.message.delete
+        # Wait 3 seconds and then delete the warning message.
+        event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
+      end
+
+      return @should_delete_message
     end
 
     def self.handle_goodbye(event)
