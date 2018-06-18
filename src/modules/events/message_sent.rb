@@ -89,7 +89,7 @@ module Bot::DiscordEvents
 
         disable_delete_all(event)
         goodbye_instructions_message.delete
-        event.channel.send_message(completed_message_array.join)
+        event.channel.send_message("Game Over! Ouija Says #{completed_message_array.join}")
       else
         goodbye_instructions_message.delete
         goodbye_message.delete
