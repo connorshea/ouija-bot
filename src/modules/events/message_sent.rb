@@ -30,12 +30,12 @@ module Bot::DiscordEvents
       # Check the last two messages in the channel
       last_two_messages = event.channel.history(2)
       # Exit unless both messages have the same author.
-      return unless last_two_messages[0].author == last_two_messages[1].author
+      return last_two_messages[0].author == last_two_messages[1].author
 
       # TODO: Fix this.
       # Technically this has a bug which allows you to send one letter, then
       # use a command, then send another letter, and be fine.
-      return unless message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
+      return message_checks_inputs(last_two_messages[0]) && message_checks_inputs(last_two_messages[1])
 
       # Delete the message.
       last_two_messages[0].delete
@@ -106,8 +106,8 @@ module Bot::DiscordEvents
     end
 
     # Returns true if the message is any of the following:
-    # - 1 character long
-    # - "Goodbye"
+    # - 1 character long and a letter/digit/punctuation mark.
+    # - "Goodbye" / "goodbye"
     # - from the current bot
     # - is a bot command
     def self.message_checks(msg)
@@ -135,7 +135,7 @@ module Bot::DiscordEvents
       # Matches the message to make sure it's:
       # - Only one character
       # - Either letters, numbers, or punctuation.
-      return /^([[:alnum:]]|[[:punct:]]){1}$/.match(msg.content)
+      return msg.content.match?(/^([[:alnum:]]|[[:punct:]]){1}$/)
     end
 
     def self.enable_delete_all(event)
