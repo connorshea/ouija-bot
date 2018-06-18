@@ -18,12 +18,12 @@ module Bot::DiscordEvents
 
       check_for_successive_messages(event)
 
-      handle_goodbye(event) if event.message.content == "Goodbye"
-
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all is enabled", 5)
         event.message.delete
       end
+
+      handle_goodbye(event) if event.message.content == "Goodbye"
     end
 
     def self.check_for_successive_messages(event)
