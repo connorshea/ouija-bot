@@ -62,16 +62,20 @@ module Bot::DiscordEvents
       end
 
       @goodbye_success = false
-      goodbye_message = event.channel.load_message(goodbye_message_id)
-      reacted_with_thumbsup = goodbye_message.reacted_with("👍")
+      begin
+        goodbye_message = event.channel.load_message(goodbye_message_id)
+        reacted_with_thumbsup = goodbye_message.reacted_with("👍")
 
-      if reacted_with_thumbsup.length >= 2
-        valid_reactions = 0
-        reacted_with_thumbsup.each do |reaction|
-          valid_reactions += 1 unless goodbye_message.author == reaction
+        if reacted_with_thumbsup.length >= 2
+          valid_reactions = 0
+          reacted_with_thumbsup.each do |reaction|
+            valid_reactions += 1 unless goodbye_message.author == reaction
+          end
+
+          @goodbye_success = true if valid_reactions >= 2
         end
-
-        @goodbye_success = true if valid_reactions >= 2
+      rescue NoMethodError => e
+        puts e
       end
 
       if @goodbye_success
@@ -79,7 +83,7 @@ module Bot::DiscordEvents
         # Run through all the messages before the most recent Goodbye, until the last game's goodbye.
         event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
           if message.content.length == 1
-            completed_message_array.unshift(message.content.upcase)
+            completed_message_array.unshift(message.content)
           elsif (message.content == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message.id
             break
           # We can only search through the last 100 messages, index 99 is the 100th item.
@@ -91,10 +95,11 @@ module Bot::DiscordEvents
 
         disable_delete_all(event)
         goodbye_instructions_message.delete
-        event.channel.send_message("Game over! Ouija Says #{completed_message_array.join}")
+        event.channel.send_message("Game over! Ouija Says #{completed_message_array.join.upcase}")
       else
         goodbye_instructions_message.delete
-        goodbye_message.delete
+        # Just in case the Goodbye message was deleted before this, check for its existence first.
+        goodbye_message.delete if goodbye_message
         event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 5)
         disable_delete_all(event)
       end
