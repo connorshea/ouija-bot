@@ -80,16 +80,18 @@ module Bot::DiscordEvents
         event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
           if message.content.length == 1
             completed_message_array.unshift(message.content.upcase)
-          elsif (message.content == "Goodbye" || message.content == "Game over!") && message.id != goodbye_message.id 
+          elsif (message.content == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message.id
             break
-          elsif index == 100
+          # We can only search through the last 100 messages, index 99 is the 100th item.
+          # If no end message is found, just print whatever we have from the last 100 messages.
+          elsif index == 99
             break
           end
         end
 
         disable_delete_all(event)
         goodbye_instructions_message.delete
-        event.channel.send_message("Game Over! Ouija Says #{completed_message_array.join}")
+        event.channel.send_message("Game over! Ouija Says #{completed_message_array.join}")
       else
         goodbye_instructions_message.delete
         goodbye_message.delete
