@@ -50,12 +50,12 @@ module Bot::DiscordEvents
       goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
         " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
         " (excluding the person who sent Goodbye) aren't given in the next"\
-        " 30 seconds, the Goodbye will be deleted."
+        " 120 seconds, the Goodbye will be deleted."
       goodbye_instructions_message = event.respond(goodbye_string)
 
       enable_delete_all(event)
 
-      while Time.now - goodbye_timestamp < 30
+      while Time.now - goodbye_timestamp < 120
         # puts "Waiting"
         sleep(15)
         # puts Time.now - goodbye_timestamp
