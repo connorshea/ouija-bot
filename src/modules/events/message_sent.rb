@@ -18,25 +18,30 @@ module Bot::DiscordEvents
         event.channel.send_temporary_message('Only one character messages or "Goodbye" are allowed.', 3)
       end
 
-      check_for_successive_messages(event)
+      successive_messages = check_for_successive_messages(event)
 
       if settings[:delete_all] && !event.message.author.current_bot?
-        event.channel.send_temporary_message("Delete all is enabled", 5)
+        event.channel.send_temporary_message("Delete all mode is enabled.", 5)
         event.message.delete
       end
 
-      handle_goodbye(event) if event.message.content.capitalize == "Goodbye"
+      # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
+      # successive message from the same user.
+      disable_goodbye_handling = successive_messages || settings[:delete_all]
+
+      # Handle goodbye if there's a "Goodbye" message and goodbye handling isn't disabled.
+      handle_goodbye(event) if event.message.content.capitalize == "Goodbye" && !disable_goodbye_handling
     end
 
     def self.check_for_successive_messages(event)
       # Check the last five messages before the event message.
       last_five_messages = event.channel.history(5, event.message.id)
-      
+
       @should_delete_message = false
 
       # Iterate through the last 5 messages prior to this event.message.
       # We want to iterate through until we either find a message that
-      # suggests that the user has submitted a duplicate entry, or until 
+      # suggests that the user has submitted a duplicate entry, or until
       # we find a message that suggests the user has not.
       #
       # Technically this only checks the last 5 messages, and therefore
@@ -87,6 +92,8 @@ module Bot::DiscordEvents
         # Wait 3 seconds and then delete the warning message.
         event.channel.send_temporary_message("Please don't send two characters in succession, let others participate!", 3)
       end
+
+      return @should_delete_message
     end
 
     def self.handle_goodbye(event)
