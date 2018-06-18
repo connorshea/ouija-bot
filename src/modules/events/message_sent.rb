@@ -82,7 +82,7 @@ module Bot::DiscordEvents
         completed_message_array = []
         # Run through all the messages before the most recent Goodbye, until the last game's goodbye.
         event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
-          if message.content.length == 1
+          if message_checks_limit_characters(message)
             completed_message_array.unshift(message.content)
           elsif (message.content == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message.id
             break
@@ -112,20 +112,30 @@ module Bot::DiscordEvents
     # - is a bot command
     def self.message_checks(msg)
       return (
-        msg.content.length == 1 ||
+        message_checks_limit_characters(msg) ||
         msg.content == "Goodbye" ||
         msg.author.current_bot? ||
         msg.content.start_with?(Bot::CONFIG.prefix)
       )
     end
 
-    # Returns true if the message is either 1 character long or "Goodbye".
+    # Returns true if the message is either 1 character long and within
+    # the valid character set, or "Goodbye".
     # This is used to validate that messages are only one entry.
     def self.message_checks_inputs(msg)
       return (
-        msg.content.length == 1 ||
+        message_checks_limit_characters(msg) ||
         msg.content == "Goodbye"
       )
+    end
+
+    # Returns true if the message is 1 character long and within
+    # the valid character set.
+    def self.message_checks_limit_characters(msg)
+      # Matches the message to make sure it's:
+      # - Only one character
+      # - Either letters, numbers, or punctuation.
+      return /^([[:alnum:]]|[[:punct:]]){1}$/.match(msg.content)
     end
 
     def self.enable_delete_all(event)
