@@ -136,8 +136,19 @@ module Bot::DiscordEvents
         disable_delete_all(event)
 
         goodbye_instructions_message.delete
-        game_over_message = event.channel.send_message("Game over! Ouija Says **#{completed_message_array.join.upcase}**")
+
+        settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
+        first_line = "Game over! "
+        if settings[:current_question].chomp(" ") != ""
+          first_line << "#{settings[:current_question]} \n"
+        end
+        game_over_message = event.channel.send_message(
+          "#{first_line}"\
+          "Ouija says **#{completed_message_array.join.upcase}**"
+        )
         game_over_message.pin
+
+        # Disable the bot.
         command_event = Discordrb::Commands::CommandEvent.new(game_over_message, event.bot)
         event.bot.execute_command(:disable, command_event, [])
       else
