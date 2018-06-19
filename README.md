@@ -7,23 +7,20 @@ The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
 
 ### Bot Duties
 
-- Unlock a Discord channel.
-- Delete any messages that aren't either single letters or "Goodbye".
-  - This should allow all 26 letters of the alphabet, plus accented characters (e.g. ñ).
-  - No spaces?
-  - It should also allow punctuation such as `.`, `?`, `'`, and `!`.
-- Delete any messages where the same user adds a letter twice in a row.
-- On a "Goodbye" it prints the word you spelled and locks the channel for a few hours.
-- It will randomly come back after somewhere between 2 and 6 hours.
-  - Make this configurable?
-- Make it so the "Goodbye" needs two thumbs-up reactions from other users before it will be accepted.
+- [x] Delete any messages that aren't either single letters or "Goodbye".
+  - [x] This should allow all 26 letters of the alphabet, plus accented characters (e.g. ñ).
+  - [x] It should also allow punctuation such as `.`, `?`, `'`, and `!`.
+  - [ ] Allow spaces via a keyword.
+- [x] Delete any messages where the same user adds a letter twice in a row.
+- [x] On a "Goodbye" it prints the word you spelled.
+- [x] Make it so the "Goodbye" needs two thumbs-up reactions from other users before it will be accepted.
+- [ ] Pin the message once the game is over.
 
 ### Edge-cases
 
 - Users editing their messages.
 - Users deleting their messages.
 - Posting images/files to the channel.
-  - This can be solved by preventing file upload in the channel?
 
 ### Extras
 
