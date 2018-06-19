@@ -19,7 +19,7 @@ module Bot::DiscordCommands
       else
         Bot::Database::Settings.create(guild_id: event.server.id, enabled: true)
       end
-      event.respond("Ouija mode is enabled.")
+      event.channel.send_message("Ouija mode is enabled.")
     end
 
     command(:disable, description: "Disables Ouija mode.") do |event|
@@ -30,7 +30,7 @@ module Bot::DiscordCommands
         Bot::Database::Settings.create(guild_id: event.server.id, enabled: false)
       end
 
-      event.respond("Ouija mode is disabled.")
+      event.channel.send_message("Ouija mode is disabled.")
     end
   end
 end
