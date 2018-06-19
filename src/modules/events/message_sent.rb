@@ -137,6 +137,7 @@ module Bot::DiscordEvents
         game_over_message.pin
       else
         goodbye_instructions_message.delete
+        goodbye_message = event.channel.load_message(goodbye_message_id)
         # Just in case the Goodbye message was deleted before this, check for its existence first.
         goodbye_message.delete if goodbye_message
         event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 15)
