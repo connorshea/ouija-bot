@@ -78,6 +78,9 @@ module Bot::DiscordEvents
         # Break if Goodbye. This suggests a new game started.
         break if message.content.capitalize == "Goodbye"
 
+        # Break if there's a `ouija!start` command. This suggests a new game started.
+        break if message.content.start_with?("#{Bot::CONFIG.prefix}start")
+
         # Check if the author of this message is the same as the author of
         # the event.message.
         if event.message.author == message.author
@@ -140,7 +143,7 @@ module Bot::DiscordEvents
         settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
         first_line = "Game over! "
         if settings[:current_question].chomp(" ") != ""
-          first_line << "#{settings[:current_question]} \n"
+          first_line << "Question: **#{settings[:current_question]}**\n"
         end
         game_over_message = event.channel.send_message(
           "#{first_line}"\
