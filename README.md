@@ -8,7 +8,7 @@ The bot is built from [z64's gemstone template](https://github.com/z64/gemstone)
 
 This bot is for managing games of Ouija. It’s based on [the spirit board “game” of the same name](https://en.wikipedia.org/wiki/Ouija) and the subreddit [r/AskOuija](https://www.reddit.com/r/AskOuija/). 
 
-Essentially, once a game starts each player can submit messages (see below for rules) that are either single characters, “Space”, or “Goodbye”. A “Goodbye” will attempt to end the game. Once the game ends successfully, the bot posts the string of letters/words.
+Essentially, once a game starts each player can submit messages (see below for rules) that are either single characters, `Space`, or `Goodbye`. A `Goodbye` will attempt to end the game. Once the game ends successfully, the bot posts the string of letters/words.
 
 The goal is to collaborate – without talking to each other – and write out a word or phrase.
 
@@ -27,8 +27,8 @@ Once the game starts, only certain messages are allowed. All other messages will
 Only messages that follow these rules will be allowed:
 - The message must be one of the following:
 	- Only one character long
-	- “Space” - These are replaced with a space character in the final string.
-	- “Goodbye” - This attempts to end the game.
+	- `Space` - These are replaced with a space character in the final string.
+	- `Goodbye` - This attempts to end the game.
 - Single character messages must be one of the following:
 	- Any Latin characters of the alphabet, uppercase or lowercase.
 	- Any numbers 0-9.
@@ -37,15 +37,15 @@ Only messages that follow these rules will be allowed:
 
 ### Ending a game with Goodbye
 
-A game of Ouija can be ended when a user sends a “Goodbye”. 
+A game of Ouija can be ended when a user sends a `Goodbye`. 
 
-A “Goodbye” causes two things to happen:
+A `Goodbye` causes two things to happen:
 - The game stops for up to 120 seconds and all new messages will be deleted.
-- The bot requests that users give two :thumbsup: reactions to the “Goodbye” message. Note that reactions from the user who sent the “Goodbye” will not be counted.
+- The bot requests that users give two :thumbsup: reactions to the `Goodbye` message. Note that reactions from the user who sent the `Goodbye` will not be counted.
 
-If the game gets to 120 seconds without the “Goodbye” message receiving a sufficient number of reactions, the “Goodbye” message is deleted and the game is allowed to continue.
+If the game gets to 120 seconds without the `Goodbye` message receiving a sufficient number of reactions, the `Goodbye` message is deleted and the game is allowed to continue.
 
-If the “Goodbye” message receives a sufficient number of reactions, the game will end and the bot will post the final answer. The bot checks the number of reactions every 15 seconds, so you shouldn’t need to wait a full 2 minutes for the game to end.
+If the `Goodbye` message receives a sufficient number of reactions, the game will end and the bot will post the final answer. The bot checks the number of reactions every 15 seconds, so you shouldn’t need to wait a full 2 minutes for the game to end.
 
 ## Bot features
 
@@ -60,7 +60,7 @@ If the “Goodbye” message receives a sufficient number of reactions, the game
 
 ### Edge-cases
 
-The bot currently cannot handle the following:
+The bot currently doesn't really handle the following:
 
 - Users editing their messages.
 - Users deleting their messages.
