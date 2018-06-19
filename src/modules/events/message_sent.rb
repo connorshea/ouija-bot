@@ -108,27 +108,12 @@ module Bot::DiscordEvents
 
       enable_delete_all(event)
 
-      while Time.now - goodbye_timestamp < 120
-        # puts "Waiting"
-        sleep(15)
-        # puts Time.now - goodbye_timestamp
-      end
-
       @goodbye_success = false
-      begin
-        goodbye_message = event.channel.load_message(goodbye_message_id)
-        reacted_with_thumbsup = goodbye_message.reacted_with("👍")
 
-        if reacted_with_thumbsup.length >= 2
-          valid_reactions = 0
-          reacted_with_thumbsup.each do |reaction|
-            valid_reactions += 1 unless goodbye_message.author == reaction
-          end
-
-          @goodbye_success = true if valid_reactions >= 2
-        end
-      rescue NoMethodError => e
-        puts e
+      while Time.now - goodbye_timestamp < 120
+        sleep(15)
+        @goodbye_success = goodbye_check_helper(event, goodbye_message_id)
+        break if @goodbye_success
       end
 
       if @goodbye_success
@@ -157,6 +142,28 @@ module Bot::DiscordEvents
         event.channel.send_temporary_message("Not enough :thumbsup:, let's continue!", 15)
         disable_delete_all(event)
       end
+    end
+
+    def self.goodbye_check_helper(event, goodbye_message_id)
+      goodbye_success = false
+
+      begin
+        goodbye_message = event.channel.load_message(goodbye_message_id)
+        reacted_with_thumbsup = goodbye_message.reacted_with("👍")
+
+        if reacted_with_thumbsup.length >= 2
+          valid_reactions = 0
+          reacted_with_thumbsup.each do |reaction|
+            valid_reactions += 1 unless goodbye_message.author == reaction
+          end
+
+          goodbye_success = true if valid_reactions >= 2
+        end
+      rescue NoMethodError => e
+        puts e
+      end
+
+      return goodbye_success
     end
 
     # Returns true if the message is any of the following:
