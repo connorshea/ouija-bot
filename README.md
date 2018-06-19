@@ -39,13 +39,14 @@ Only messages that follow these rules will be allowed:
 
 A game of Ouija can be ended when a user sends a `Goodbye`. 
 
-A `Goodbye` causes two things to happen:
-- The game stops for up to 120 seconds and all new messages will be deleted.
+A `Goodbye` causes three things to happen:
+- The game stops for up to 5 minutes (600 seconds) and all new messages will be deleted.
 - The bot requests that users give two :thumbsup: reactions to the `Goodbye` message. Note that reactions from the user who sent the `Goodbye` will not be counted.
+- The bot requests that users give two :thumbsdown: reactions to the `Goodbye` message in order to delete it.
 
-If the game gets to 120 seconds without the `Goodbye` message receiving a sufficient number of reactions, the `Goodbye` message is deleted and the game is allowed to continue.
+If the game gets to 600 seconds without the `Goodbye` message receiving a sufficient number of reactions, the `Goodbye` message is deleted and the game will continue.
 
-If the `Goodbye` message receives a sufficient number of reactions, the game will end and the bot will post the final answer. The bot checks the number of reactions every 15 seconds, so you shouldn’t need to wait a full 2 minutes for the game to end.
+If the `Goodbye` message receives a sufficient number of reactions, the game will end and the bot will post the final answer. The bot checks the number of reactions every 15 seconds, so you shouldn’t need to wait a full 5 minutes for the game to end.
 
 ## Bot features
 
