@@ -8,11 +8,17 @@ module Bot::DiscordCommands
 
       settings_info = "**Settings**\n"\
         "`Ouija Mode`: #{settings[:enabled] ? 'Enabled' : 'Disabled'}\n"\
-        "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}"
+        "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}\n"\
+        "`Current Question`: #{settings[:current_question]}"
       event.respond(settings_info)
     end
 
-    command(:enable, description: "Enables Ouija mode.") do |event|
+    command(:enable, help_available: false, description: "Enables Ouija mode.") do |event|
+      can_send_messages = event.user.permission?(:manage_channels)
+      unless can_send_messages || event.user.current_bot?
+        event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
+        break
+      end
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings
         settings.update(enabled: true)
@@ -22,7 +28,12 @@ module Bot::DiscordCommands
       event.channel.send_message("Ouija mode is enabled.")
     end
 
-    command(:disable, description: "Disables Ouija mode.") do |event|
+    command(:disable, help_available: false, description: "Disables Ouija mode.") do |event|
+      can_send_messages = event.user.permission?(:manage_channels)
+      unless can_send_messages || event.user.current_bot?
+        event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
+        break
+      end
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings
         settings.update(enabled: false)
