@@ -13,7 +13,7 @@ module Bot::DiscordCommands
     end
 
     command(:enable, description: "Enables Ouija mode.") do |event|
-      can_send_messages = event.message.author.permission?(:manage_channels)
+      can_send_messages = event.user.permission?(:manage_channels)
       unless can_send_messages
         event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
         break
@@ -28,7 +28,7 @@ module Bot::DiscordCommands
     end
 
     command(:disable, description: "Disables Ouija mode.") do |event|
-      can_send_messages = event.message.author.permission?(:manage_channels)
+      can_send_messages = event.user.permission?(:manage_channels)
       unless can_send_messages
         event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
         break
