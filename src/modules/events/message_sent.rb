@@ -137,7 +137,7 @@ module Bot::DiscordEvents
         goodbye_instructions_message.delete
         game_over_message = event.channel.send_message("Game over! Ouija Says **#{completed_message_array.join.upcase}**")
         game_over_message.pin
-        disable_ouija_mode(event)
+        Bot::BOT.execute_command(:disable, event, [])
       else
         goodbye_instructions_message.delete
         goodbye_message = event.channel.load_message(goodbye_message_id)
@@ -204,16 +204,6 @@ module Bot::DiscordEvents
       # - Only one character
       # - Either letters, numbers, or punctuation.
       return msg.content.match?(/^([[:alnum:]]|[[:punct:]]){1}$/)
-    end
-
-    def self.disable_ouija_mode(event)
-      settings = Bot::Database::Settings.find(guild_id: event.server.id)
-      if settings
-        settings.update(enabled: false)
-      else
-        Bot::Database::Settings.create(guild_id: event.server.id, enabled: false)
-      end
-      event.send_message("Ouija mode is disabled.")
     end
 
     def self.enable_delete_all(event)
