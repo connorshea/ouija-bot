@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2018-06-19
 ### Added
 - Delete any messages that aren't either single letters or "Goodbye".
 - "Goodbye" handling.
@@ -21,4 +22,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [#13]: https://github.com/connorshea/ouija-bot/pull/13
 [#14]: https://github.com/connorshea/ouija-bot/pull/14
 
-[Unreleased]: https://github.com/connorshea/ouija-bot/compare/b00da172b81f63ce4a6a41d17b93ae61e24b96c6...HEAD
+[Unreleased]: https://github.com/connorshea/ouija-bot/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/connorshea/ouija-bot/compare/b00da172b81f63ce4a6a41d17b93ae61e24b96c6...v1.0.0
