@@ -1,11 +1,53 @@
 # ouija-bot
-A Discord bot based on the subreddit [r/AskOuija](https://www.reddit.com/r/AskOuija/).
 
-TL;DR The bot will randomly open a Discord channel, e.g. `#ouija`. It will post an explanation message of how the game is played and then one random letter of the alphabet. The goal is for users to write out a word or phrase one letter at a time.
+A Discord bot for playing Ouija.
 
-The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
+The bot is built from [z64's gemstone template](https://github.com/z64/gemstone).
 
-### Bot Duties
+## How to play
+
+This bot is for managing games of Ouija. It’s based on [the spirit board “game” of the same name](https://en.wikipedia.org/wiki/Ouija) and the subreddit [r/AskOuija](https://www.reddit.com/r/AskOuija/). 
+
+Essentially, once a game starts each player can submit messages (see below for rules) that are either single characters, “Space”, or “Goodbye”. A “Goodbye” will attempt to end the game. Once the game ends successfully, the bot posts the string of letters/words.
+
+The goal is to collaborate – without talking to each other – and write out a word or phrase.
+
+### Starting a game
+
+You can start a game of Ouija with the command `ouija!start`.
+
+There are two game modes:
+- The first, which can be started with `ouija!start`, simply runs the game with no specific topic.
+- The second game mode runs the game in the same way, but with a question that the players are attempting to answer. It can be started with `ouija!start Question?`, e.g. `ouija!start Spirits, what is your favorite color?`.
+
+### Allowed messages
+
+Once the game starts, only certain messages are allowed. All other messages will be deleted. 
+
+Only messages that follow these rules will be allowed:
+- The message must be one of the following:
+	- Only one character long
+	- “Space” - These are replaced with a space character in the final string.
+	- “Goodbye” - This attempts to end the game.
+- Single character messages must be one of the following:
+	- Any Latin characters of the alphabet, uppercase or lowercase.
+	- Any numbers 0-9.
+	- Any punctuation marks, e.g. `?`, `!`, `,`, `’`, `;`, etc.
+- The same user cannot send two messages in a row.
+
+### Ending a game with Goodbye
+
+A game of Ouija can be ended when a user sends a “Goodbye”. 
+
+A “Goodbye” causes two things to happen:
+- The game stops for up to 120 seconds and all new messages will be deleted.
+- The bot requests that users give two :thumbsup: reactions to the “Goodbye” message. Note that reactions from the user who sent the “Goodbye” will not be counted.
+
+If the game gets to 120 seconds without the “Goodbye” message receiving a sufficient number of reactions, the “Goodbye” message is deleted and the game is allowed to continue.
+
+If the “Goodbye” message receives a sufficient number of reactions, the game will end and the bot will post the final answer. The bot checks the number of reactions every 15 seconds, so you shouldn’t need to wait a full 2 minutes for the game to end.
+
+## Bot features
 
 - [x] Delete any messages that aren't either single letters or "Goodbye".
   - [x] This should allow all 26 letters of the alphabet, plus accented characters (e.g. ñ).
@@ -18,59 +60,15 @@ The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
 
 ### Edge-cases
 
+The bot currently cannot handle the following:
+
 - Users editing their messages.
 - Users deleting their messages.
-- Posting images/files to the channel.
 
-### Extras
+## Contributing
 
-- Make it possible for mods/admins to run the bot with a command which unlocks the channel and starts another round of Ouija?
-- Pinging to make sure the bot is online.
-- Safeguard to handle a case where the bot disconnects in the middle of a game?
-- Make an "AskOuija" mode where someone submits a question to the bot.
-  - This can be done in one of two ways:
-    - Have the bot start by asking for a question submission.
-    - Have the bot accept suggestions in another channel like `#bot-spam` and then post a message with a list of the questions. It then has people react to that message with number emoji and chooses the top-voted question.
+Pull requests are happily accepted (within reason). See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-## Development
+## License
 
-To start, you'll need Ruby and Postgres.
-
-- `gem install bundler`
-- `bundle install` to install dependencies
-- Create a `.env` file and add environmental variables called `DISCORD_TOKEN` and `DISCORD_CLIENT_ID`.
-
-The `.env` file should look like this:
-
-```
-# Replace the random string of characters with your token (yes I invalidated this token, don't worry).
-DISCORD_TOKEN=NDU0NDA3Mzk2MzQxODQxOTY3.DftMXw.Scfd1sM2rEGWNSnbOquqcWmmnxY
-# Replace the ID number with the client ID for your instance of the Discord bot.
-DISCORD_CLIENT_ID=454407396341841967
-```
-
-- Enter the postgres CLI with `psql` and run `CREATE DATABASE ouijabot;`, this should create the database.
-- `rake` will start the bot and allow it to be interacted-with.
-
-## Deployment
-
-This is meant to be deployed on Heroku, it should probably work elsewhere but
-these steps are specific to Heroku.
-
-- Fork this repository
-- In `data/config.yaml` you'll need to change the owner to your own Discord User ID. This can be accessed by enabling Developer Mode in the Discord Settings, then right-clicking on your username and using "Copy ID".
-- Create a new application at https://discordapp.com/developers/applications/me, give it a name and also, optionally, a description and profile picture.
-- After creating the app, Discord will show you the app's page which has some configuration options. You'll want to make note of the "Client ID". It'll be important for later.
-- Use "Create a Bot User" to enable the bot.
-- Click to reveal the token and copy it.
-- Create a new Heroku app.
-- On the Deploy page, connect the forked GitHub repository to the Heroku app.
-- In Settings, add two "Config Vars":
-  - `DISCORD_CLIENT_ID`, which should be set to the Discord bot app's client ID that was mentioned earlier.
-  - `DISCORD_TOKEN`, which should be set to the token, also mentioned earlier.
-- On the "Resources" page, add the Heroku Postgres addon.
-- Deploy the bot from the "Deploy" page.
-- On the "Resources" page, enable the `worker bundle exec rake` dyno.
-- Back to the Discord app page, click "Generate Oauth2 URL" button.
-- Enable the following permissions: "Send Messages", "Manage Messages", "Read Message History".
-- Copy the link, this link can be used to add bots to a server. You can use it yourself if you have permissions to add bots, or you can give it to the moderators of a server for them to add it.
+The bot is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT). See [LICENSE](LICENSE).
