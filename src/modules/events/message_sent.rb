@@ -13,7 +13,7 @@ module Bot::DiscordEvents
       # a warning.
       unless message_checks(event.message)
         # Delete the message
-        event.message.delete
+        event.message.delete if event.message
         # Wait 3 seconds and then delete the warning message.
         event.channel.send_temporary_message('Only one character messages or "Goodbye" are allowed.', 3)
       end
