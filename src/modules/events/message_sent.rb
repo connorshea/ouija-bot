@@ -106,17 +106,22 @@ module Bot::DiscordEvents
       goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
         " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
         " (excluding the person who sent Goodbye) aren't given in the next"\
-        " 120 seconds, the Goodbye will be deleted."
+        " 5 minutes, the Goodbye will be deleted.\n"\
+        "If you want to delete the Goodbye without waiting the full 5"\
+        " minutes, react to the Goodbye with :thumbsdown:. Two thumbsdown"\
+        " will cause the Goodbye to be deleted so the game can continue."
       goodbye_instructions_message = event.respond(goodbye_string)
 
       enable_delete_all(event)
 
       @goodbye_success = false
+      @goodbye_failure = false
 
-      while Time.now - goodbye_timestamp < 120
+      while Time.now - goodbye_timestamp < 600
         sleep(15)
-        @goodbye_success = goodbye_check_helper(event, goodbye_message_id)
-        break if @goodbye_success
+        @goodbye_success = goodbye_success_check_helper(event, goodbye_message_id)
+        @goodbye_failure = goodbye_failure_check_helper(event, goodbye_message_id)
+        break if @goodbye_success || @goodbye_failure
       end
 
       if @goodbye_success
@@ -154,6 +159,13 @@ module Bot::DiscordEvents
         # Disable the bot.
         command_event = Discordrb::Commands::CommandEvent.new(game_over_message, event.bot)
         event.bot.execute_command(:disable, command_event, [])
+      elsif @goodbye_failure
+        goodbye_instructions_message.delete
+        goodbye_message = event.channel.load_message(goodbye_message_id)
+        # Just in case the Goodbye message was deleted before this, check for its existence first.
+        goodbye_message.delete if goodbye_message
+        event.channel.send_temporary_message("Recieved more than two :thumbsdown:, let's continue!", 15)
+        disable_delete_all(event)
       else
         goodbye_instructions_message.delete
         goodbye_message = event.channel.load_message(goodbye_message_id)
@@ -164,7 +176,7 @@ module Bot::DiscordEvents
       end
     end
 
-    def self.goodbye_check_helper(event, goodbye_message_id)
+    def self.goodbye_success_check_helper(event, goodbye_message_id)
       goodbye_success = false
 
       begin
@@ -184,6 +196,21 @@ module Bot::DiscordEvents
       end
 
       return goodbye_success
+    end
+
+    # Checks if there have been two or more thumbsdown on a Goodbye, which will cancel it.
+    def self.goodbye_failure_check_helper(event, goodbye_message_id)
+      goodbye_failure = false
+
+      begin
+        goodbye_message = event.channel.load_message(goodbye_message_id)
+        reacted_with_thumbsdown = goodbye_message.reacted_with("👎")
+        goodbye_failure = true if reacted_with_thumbsdown.length >= 2
+      rescue NoMethodError => e
+        puts e
+      end
+
+      return goodbye_failure
     end
 
     # Returns true if the message is any of the following:
