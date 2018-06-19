@@ -6,8 +6,8 @@ module Bot::DiscordEvents
     message(in: Bot::CONFIG.channel_name) do |event|
       # Create the settings variable
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
-      # If the `enabled` setting is set to false, return early.
-      return unless settings[:enabled]
+      # If the `enabled` setting is set to false, break early.
+      break unless settings[:enabled]
 
       # If the message fails the message checks, delete the message and send
       # a warning.
