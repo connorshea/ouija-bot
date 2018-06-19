@@ -10,11 +10,11 @@ The bot is based on [z64's gemstone template](https://github.com/z64/gemstone).
 - [x] Delete any messages that aren't either single letters or "Goodbye".
   - [x] This should allow all 26 letters of the alphabet, plus accented characters (e.g. ñ).
   - [x] It should also allow punctuation such as `.`, `?`, `'`, and `!`.
-  - [ ] Allow spaces via a keyword.
+  - [x] Allow spaces via a keyword.
 - [x] Delete any messages where the same user adds a letter twice in a row.
 - [x] On a "Goodbye" it prints the word you spelled.
 - [x] Make it so the "Goodbye" needs two thumbs-up reactions from other users before it will be accepted.
-- [ ] Pin the message once the game is over.
+- [x] Pin the message once the game is over.
 
 ### Edge-cases
 
