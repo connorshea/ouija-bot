@@ -122,7 +122,7 @@ module Bot::DiscordEvents
         event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
           if message_checks_limit_characters(message)
             completed_message_array.unshift(message.content)
-          elsif (message.content.capitalize == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message.id
+          elsif (message.content.capitalize == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message_id
             break
           # We can only search through the last 100 messages, index 99 is the 100th item.
           # If no end message is found, just print whatever we have from the last 100 messages.
