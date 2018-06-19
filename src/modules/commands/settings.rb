@@ -14,26 +14,41 @@ module Bot::DiscordCommands
     end
 
     command(:enable, description: "Enables Ouija mode. Only available for users with the ability to manage channels.") do |event|
+      # Only allow this command if the user that triggered the event can manage
+      # channels in this server or if the event was triggered by the bot (this
+      # implies that the command was triggered internally by the
+      # `execute_command` method).
       can_send_messages = event.user.permission?(:manage_channels)
       unless can_send_messages || event.user.current_bot?
         event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
         break
       end
+
+      # Set `enabled` to true.
+      # If there's no row in the database for this server, create one.
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings
         settings.update(enabled: true)
       else
         Bot::Database::Settings.create(guild_id: event.server.id, enabled: true)
       end
+
       event.channel.send_message("Ouija mode is enabled.")
     end
 
     command(:disable, description: "Disables Ouija mode. Only available for users with the ability to manage channels.") do |event|
+      # Only allow this command if the user that triggered the event can manage
+      # channels in this server or if the event was triggered by the bot (this
+      # implies that the command was triggered internally by the
+      # `execute_command` method).
       can_send_messages = event.user.permission?(:manage_channels)
       unless can_send_messages || event.user.current_bot?
         event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Ouija mode.", 5)
         break
       end
+
+      # Set `enabled` to false.
+      # If there's no row in the database for this server, create one.
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings
         settings.update(enabled: false)

@@ -1,5 +1,5 @@
 module Bot::DiscordCommands
-  # A command for printing meta information about the bot.
+  # A command for printing a link to the 'How to Play' guide.
   module HowToPlay
     extend Discordrb::Commands::CommandContainer
 
