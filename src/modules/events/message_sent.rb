@@ -15,7 +15,7 @@ module Bot::DiscordEvents
         # Delete the message
         event.message.delete if event.message
         # Wait 3 seconds and then delete the warning message.
-        event.channel.send_temporary_message('Only one character messages or "Goodbye" are allowed.', 3)
+        event.channel.send_temporary_message('Only one character messages, "Space", or "Goodbye" are allowed.', 3)
       end
 
       successive_messages = check_for_successive_messages(event)
@@ -122,6 +122,8 @@ module Bot::DiscordEvents
         event.channel.history(100, goodbye_instructions_message.id).each_with_index do |message, index|
           if message_checks_limit_characters(message)
             completed_message_array.unshift(message.content)
+          elsif message.content.capitalize == "Space"
+            completed_message_array.unshift(" ")
           elsif (message.content.capitalize == "Goodbye" || message.content.start_with?("Game over!")) && message.id != goodbye_message_id
             break
           # We can only search through the last 100 messages, index 99 is the 100th item.
@@ -170,24 +172,27 @@ module Bot::DiscordEvents
     # Returns true if the message is any of the following:
     # - 1 character long and a letter/digit/punctuation mark.
     # - "Goodbye" / "goodbye"
+    # - "Space" / "space"
     # - from the current bot
     # - is a bot command
     def self.message_checks(msg)
       return (
         message_checks_limit_characters(msg) ||
         msg.content.capitalize == "Goodbye" ||
+        msg.content.capitalize == "Space" ||
         msg.author.current_bot? ||
         msg.content.start_with?(Bot::CONFIG.prefix)
       )
     end
 
     # Returns true if the message is either 1 character long and within
-    # the valid character set, or "Goodbye".
+    # the valid character set, "Space", or "Goodbye".
     # This is used to validate that messages are only one entry.
     def self.message_checks_inputs(msg)
       return (
         message_checks_limit_characters(msg) ||
-        msg.content.capitalize == "Goodbye"
+        msg.content.capitalize == "Goodbye" ||
+        msg.content.capitalize == "Space"
       )
     end
 
