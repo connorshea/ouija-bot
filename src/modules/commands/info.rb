@@ -9,6 +9,10 @@ module Bot::DiscordCommands
         "Source Code: <https://github.com/connorshea/ouija-bot>\n"\
         "License: MIT"
 
+      if ENV['HEROKU_SLUG_COMMIT']
+        info << "\nVersion: #{ENV['HEROKU_SLUG_COMMIT']}"
+      end
+
       event.respond(info)
     end
   end
