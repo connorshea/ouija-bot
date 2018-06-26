@@ -49,15 +49,20 @@ module Bot::DiscordEvents
       # messages or something, but it's not that important.
       #
       # This loop checks each message for these things in the following order:
+      # - If the message starts with ouija!start, break and exit the loop.
       # - If the event message is invalid, break and exit the loop.
       # - If the message is from the bot, ignore it and continue.
       # - If the message is from another user and that message
       #   is a valid submission, exit the loop.
       # - If the message is from the same user but is an invalid submission,
       #   skip to the next message.
+      # - If the message is Goodbye, break and exit the loop.
       # - If the message is from the same user as the event.message, exit the
       #   loop and set @should_delete_message to true.
       last_five_messages.each do |message|
+        # Break if there's a `ouija!start` command. This suggests a new game started.
+        break if message.content.start_with?("#{Bot::CONFIG.prefix}start")
+
         # Break unless the event message is valid.
         # If it's not valid, we can break because that means they either used a
         # command or something invalid that will be deleted by the event handler.
@@ -77,9 +82,6 @@ module Bot::DiscordEvents
 
         # Break if Goodbye. This suggests a new game started.
         break if message.content.capitalize == "Goodbye"
-
-        # Break if there's a `ouija!start` command. This suggests a new game started.
-        break if message.content.start_with?("#{Bot::CONFIG.prefix}start")
 
         # Check if the author of this message is the same as the author of
         # the event.message.
