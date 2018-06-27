@@ -159,7 +159,16 @@ module Bot::DiscordEvents
           "#{first_line}"\
           "Ouija says **#{completed_message_array.join.upcase}**"
         )
-        game_over_message.pin
+
+        # Pin the goodbye message or handle the error if one occurs.
+        begin
+          game_over_message.pin
+        rescue RestClient::BadRequest => ex
+          data = JSON.parse(ex.response.body)
+          if Discordrb::Errors.error_class_for(data['code']) == Discordrb::Errors::PinLimitReached
+            event.channel.send_message("Pin limit reached (only 50 are allowed per channel), we can't pin this message! Please create a new Ouija channel or unpin some of the existing messages.")
+          end
+        end
 
         # Disable the bot.
         command_event = Discordrb::Commands::CommandEvent.new(game_over_message, event.bot)
