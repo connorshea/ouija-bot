@@ -104,6 +104,7 @@ module Bot::DiscordEvents
     def self.handle_goodbye(event)
       goodbye_timestamp = event.timestamp
       goodbye_message_id = event.message.id
+      settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
 
       goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
         " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
@@ -112,6 +113,8 @@ module Bot::DiscordEvents
         "If you want to delete the Goodbye without waiting the full 5"\
         " minutes, react to the Goodbye with :thumbsdown:. Two thumbsdown"\
         " will cause the Goodbye to be deleted so the game can continue."
+
+      goodbye_string = "**Debug mode is enabled**, only one upvote/downvote required for success." if settings[:debug_mode]
       goodbye_instructions_message = event.respond(goodbye_string)
 
       enable_delete_all(event)
@@ -180,18 +183,22 @@ module Bot::DiscordEvents
 
     def self.goodbye_success_check_helper(event, goodbye_message_id)
       goodbye_success = false
+      settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
 
       begin
         goodbye_message = event.channel.load_message(goodbye_message_id)
         reacted_with_thumbsup = goodbye_message.reacted_with("👍")
 
-        if reacted_with_thumbsup.length >= 2
+        number_of_reactions_needed = 2
+        number_of_reactions_needed = 1 if settings[:debug_mode]
+
+        if reacted_with_thumbsup.length >= number_of_reactions_needed
           valid_reactions = 0
           reacted_with_thumbsup.each do |reaction|
-            valid_reactions += 1 unless goodbye_message.author == reaction
+            valid_reactions += 1 if goodbye_message.author != reaction || settings[:debug_mode]
           end
 
-          goodbye_success = true if valid_reactions >= 2
+          goodbye_success = true if valid_reactions >= number_of_reactions_needed
         end
       rescue NoMethodError => e
         puts e
@@ -203,11 +210,15 @@ module Bot::DiscordEvents
     # Checks if there have been two or more thumbsdown on a Goodbye, which will cancel it.
     def self.goodbye_failure_check_helper(event, goodbye_message_id)
       goodbye_failure = false
+      settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
+
+      number_of_reactions_needed = 2
+      number_of_reactions_needed = 1 if settings[:debug_mode]
 
       begin
         goodbye_message = event.channel.load_message(goodbye_message_id)
         reacted_with_thumbsdown = goodbye_message.reacted_with("👎")
-        goodbye_failure = true if reacted_with_thumbsdown.length >= 2
+        goodbye_failure = true if reacted_with_thumbsdown.length >= number_of_reactions_needed
       rescue NoMethodError => e
         puts e
       end
