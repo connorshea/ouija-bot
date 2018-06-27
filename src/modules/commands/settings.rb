@@ -9,7 +9,7 @@ module Bot::DiscordCommands
       settings_info = "**Settings**\n"\
         "`Ouija Mode`: #{settings[:enabled] ? 'Enabled' : 'Disabled'}\n"\
         "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}\n"\
-        "`Current Question`: #{settings[:current_question]}"\
+        "`Current Question`: #{settings[:current_question]}\n"\
         "`Debug Mode`: #{settings[:debug_mode] ? 'Enabled' : 'Disabled'}\n"
       event.respond(settings_info)
     end
@@ -58,6 +58,36 @@ module Bot::DiscordCommands
       end
 
       event.channel.send_message("Ouija mode is disabled.")
+    end
+
+    command(:enable_debug, help_available: false, description: "Enables a debug mode.") do |event|
+      break unless event.user.id == Bot::CONFIG.owner
+
+      # Set `enabled` to true.
+      # If there's no row in the database for this server, create one.
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(debug_mode: true)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, debug_mode: true)
+      end
+
+      event.channel.send_message("Debug mode is enabled.")
+    end
+
+    command(:disable_debug, help_available: false, description: "Disables a debug mode.") do |event|
+      break unless event.user.id == Bot::CONFIG.owner
+
+      # Set `enabled` to false.
+      # If there's no row in the database for this server, create one.
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(debug_mode: false)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, debug_mode: false)
+      end
+
+      event.channel.send_message("Debug mode is disabled.")
     end
   end
 end
