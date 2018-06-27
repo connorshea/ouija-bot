@@ -9,7 +9,8 @@ module Bot::DiscordCommands
       settings_info = "**Settings**\n"\
         "`Ouija Mode`: #{settings[:enabled] ? 'Enabled' : 'Disabled'}\n"\
         "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}\n"\
-        "`Current Question`: #{settings[:current_question]}"
+        "`Current Question`: #{settings[:current_question]}"\
+        "`Debug Mode`: #{settings[:debug_mode] ? 'Enabled' : 'Disabled'}\n"
       event.respond(settings_info)
     end
 
