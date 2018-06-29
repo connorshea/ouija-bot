@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Increase the Goodbye timeout to 5 minutes. ([#15])
 - Link to the GitHub commit in the info command's output if the bot is on Heroku.
+- Make the `ouija!start` command work only in the `#ouija` channel.
 
 ### Fixed
 - Handle the `PinLimitReached` error when a channel reaches 50 pinned messages. ([#20])

@@ -6,9 +6,14 @@ module Bot::DiscordCommands
     command(
       :start,
       description: "Starts a new game of Ouija. Takes an optional question argument.",
-      usage: "start [question]",
-      channels: ['ouija']
+      usage: "start [question]"
     ) do |event, *question|
+      # Only allow this command in a channel named ouija.
+      unless event.channel.name == "ouija"
+        event.channel.send_temporary_message("This command will only work in a channel named #ouija. Please start a game from there.", 15)
+        break
+      end
+
       # Send a message so we can create a CommandEvent with a message from the bot.
       start_message = event.channel.send_message("Starting a new game of Ouija...")
       # Create a CommandEvent with a message sent by the bot.
