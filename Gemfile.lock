@@ -53,7 +53,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
-    sequel (5.9.0)
+    sequel (5.10.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
@@ -72,7 +72,7 @@ DEPENDENCIES
   pg (~> 1.0)
   rake (~> 12.3)
   rubocop (~> 0.57)
-  sequel (~> 5.9.0)
+  sequel (~> 5.10.0)
 
 BUNDLED WITH
    1.16.2
