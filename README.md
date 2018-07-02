@@ -4,6 +4,8 @@ A Discord bot for playing Ouija.
 
 The bot is built from [z64's gemstone template](https://github.com/z64/gemstone).
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/connorshea/ouija-bot)
+
 ## How to play
 
 This bot is for managing games of Ouija. It’s based on [the spirit board “game” of the same name](https://en.wikipedia.org/wiki/Ouija) and the subreddit [r/AskOuija](https://www.reddit.com/r/AskOuija/). 
