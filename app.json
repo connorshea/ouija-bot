@@ -28,12 +28,10 @@
       }
     }
   ],
-  "formation": {
-    "web": {
-      "quantity": 0
-    },
-    "worker": {
+  "formation": [
+    {
+      "type": "worker",
       "quantity": 1
     }
-  }
+  ]
 }
