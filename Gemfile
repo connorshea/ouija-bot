@@ -7,4 +7,4 @@ gem 'dotenv', '~> 2.5.0'
 gem 'sequel', '~> 5.10.0'
 gem 'pg', '~> 1.0'
 gem 'rake', '~> 12.3'
-gem 'rubocop', '~> 0.57', require: false
+gem 'rubocop', '~> 0.58', require: false
