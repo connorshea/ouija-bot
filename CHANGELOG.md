@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Add the ability to use `:thumbsdown:` on a Goodbye and have it deleted. ([#15])
 - A debug mode, can be toggled with `ouija!enable_debug` and `ouija!disable_debug`. This is only accessible to the owner of the bot right now. It makes it easier to get a "Goodbye" accepted or declined by the bot, only requiring one upvote/downvote. ([#21])
+- Add `ouija!startwithquestion` command, also available as `ouija!startq`. It chooses a random question from an included list. ([#33])
 
 ### Changed
 - Increase the Goodbye timeout to 5 minutes. ([#15])
@@ -35,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [#15]: https://github.com/connorshea/ouija-bot/pull/15
 [#20]: https://github.com/connorshea/ouija-bot/pull/20
 [#21]: https://github.com/connorshea/ouija-bot/pull/21
+[#33]: https://github.com/connorshea/ouija-bot/pull/33
 
 [Unreleased]: https://github.com/connorshea/ouija-bot/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/connorshea/ouija-bot/compare/b00da172b81f63ce4a6a41d17b93ae61e24b96c6...v1.0.0

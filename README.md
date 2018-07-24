@@ -22,6 +22,8 @@ There are two game modes:
 - The first, which can be started with `ouija!start`, simply runs the game with no specific topic.
 - The second game mode runs the game in the same way, but with a question that the players are attempting to answer. It can be started with `ouija!start Question?`, e.g. `ouija!start Spirits, what is your favorite color?`.
 
+You can also start the game with `ouija!startwithquestion` (`ouija!startq` also works). This will pick a random question from the list in `questions.yml`, included in the bot's code.
+
 ### Allowed messages
 
 Once the game starts, only certain messages are allowed. All other messages will be deleted. 
