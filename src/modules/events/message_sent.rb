@@ -108,22 +108,39 @@ module Bot::DiscordEvents
 
       goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
         " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
-        " (excluding the person who sent Goodbye) aren't given in the next"\
-        " 10 minutes, the Goodbye will be deleted.\n"\
+        " (excluding the bot and the user who sent the Goodbye) aren't"\
+        " given in the next 10 minutes, the Goodbye will be deleted.\n"\
         "If you want to delete the Goodbye without waiting the full 10"\
         " minutes, react to the Goodbye with :thumbsdown:. Two thumbsdown"\
-        " will cause the Goodbye to be deleted so the game can continue."
+        " (excluding the bot) will cause the Goodbye to be deleted so the"\
+        " game can continue."
 
       goodbye_string = "**Debug mode is enabled**, only one upvote/downvote required for success." if settings[:debug_mode]
       goodbye_instructions_message = event.respond(goodbye_string)
+
+      # Avoid hitting the rate-limit.
+      sleep(2)
+
+      # Add a thumbsup and thumbsdown to the Goodbye message.
+      goodbye_message = event.channel.load_message(goodbye_message_id)
+
+      # Unicode character for thumbsup emoji
+      goodbye_message.react("\u{1F44D}")
+
+      # Unicode character for thumbsdown emoji
+      goodbye_message.react("\u{1F44E}")
 
       enable_delete_all(event)
 
       @goodbye_success = false
       @goodbye_failure = false
 
+      # Loop and keep checking for goodbye failure/success until 10
+      # minutes have passed.
       while Time.now - goodbye_timestamp < 600
-        sleep(15)
+        # Run the check every 5 seconds if debug mode is on.
+        # Otherwise only run it every 15.
+        settings[:debug_mode] ? sleep(5) : sleep(15)
         @goodbye_success = goodbye_success_check_helper(event, goodbye_message_id)
         @goodbye_failure = goodbye_failure_check_helper(event, goodbye_message_id)
         break if @goodbye_success || @goodbye_failure
@@ -204,7 +221,10 @@ module Bot::DiscordEvents
         if reacted_with_thumbsup.length >= number_of_reactions_needed
           valid_reactions = 0
           reacted_with_thumbsup.each do |reaction|
-            valid_reactions += 1 if goodbye_message.author != reaction || settings[:debug_mode]
+            # It's a valid reaction unless the Goodbye message author
+            # was the one who sent it, or if the bot is in debug mode.
+            # It's never a valid reaction if the bot made the reaction.
+            valid_reactions += 1 if (goodbye_message.author != reaction || settings[:debug_mode]) && !reaction.current_bot?
           end
 
           goodbye_success = true if valid_reactions >= number_of_reactions_needed
@@ -221,8 +241,9 @@ module Bot::DiscordEvents
       goodbye_failure = false
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
 
-      number_of_reactions_needed = 2
-      number_of_reactions_needed = 1 if settings[:debug_mode]
+      # This number includes the default bot thumbsup for simplicity's sake.
+      number_of_reactions_needed = 3
+      number_of_reactions_needed = 2 if settings[:debug_mode]
 
       begin
         goodbye_message = event.channel.load_message(goodbye_message_id)
@@ -271,6 +292,7 @@ module Bot::DiscordEvents
       return msg.content.match?(/^([[:alnum:]]|[[:punct:]]){1}$/)
     end
 
+    # Enables Delete All mode.
     def self.enable_delete_all(event)
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings
@@ -281,6 +303,7 @@ module Bot::DiscordEvents
       event.send_temporary_message("Delete all mode is enabled.", 5)
     end
 
+    # Disables Delete All mode.
     def self.disable_delete_all(event)
       settings = Bot::Database::Settings.find(guild_id: event.server.id)
       if settings

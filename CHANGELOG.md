@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Increase the Goodbye timeout to 5 minutes. ([#15])
 - Link to the GitHub commit in the info command's output if the bot is on Heroku.
 - Make the `ouija!start` command work only in the `#ouija` channel.
+- The bot will now upvote and downvote the "Goodbye" message when it's recieved, this makes it easier for users to add `:thumbsup:`/`:thumbsdown:`. ([#34])
 
 ### Fixed
 - Handle the `PinLimitReached` error when a channel reaches 50 pinned messages. ([#20])
@@ -37,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [#20]: https://github.com/connorshea/ouija-bot/pull/20
 [#21]: https://github.com/connorshea/ouija-bot/pull/21
 [#33]: https://github.com/connorshea/ouija-bot/pull/33
+[#34]: https://github.com/connorshea/ouija-bot/pull/34
 
 [Unreleased]: https://github.com/connorshea/ouija-bot/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/connorshea/ouija-bot/compare/b00da172b81f63ce4a6a41d17b93ae61e24b96c6...v1.0.0
