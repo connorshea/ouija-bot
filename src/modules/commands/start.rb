@@ -41,7 +41,7 @@ module Bot::DiscordCommands
     end
 
     command(
-      [:startwithquestion, :startq],
+      %i[startwithquestion startq],
       description: "Starts a new game of Ouija with a question chosen from a predetermined list.",
       usage: "startwithquestion"
     ) do |event|
