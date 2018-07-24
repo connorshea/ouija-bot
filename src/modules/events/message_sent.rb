@@ -109,8 +109,8 @@ module Bot::DiscordEvents
       goodbye_string = "**Goodbye detected!** If you'd like the game to end"\
         " here, react to the Goodbye with :thumbsup:! If two thumbsup"\
         " (excluding the person who sent Goodbye) aren't given in the next"\
-        " 5 minutes, the Goodbye will be deleted.\n"\
-        "If you want to delete the Goodbye without waiting the full 5"\
+        " 10 minutes, the Goodbye will be deleted.\n"\
+        "If you want to delete the Goodbye without waiting the full 10"\
         " minutes, react to the Goodbye with :thumbsdown:. Two thumbsdown"\
         " will cause the Goodbye to be deleted so the game can continue."
 
