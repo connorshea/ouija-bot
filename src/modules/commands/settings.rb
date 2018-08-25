@@ -10,7 +10,7 @@ module Bot::DiscordCommands
         "`Ouija Mode`: #{settings[:enabled] ? 'Enabled' : 'Disabled'}\n"\
         "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}\n"\
         "`Current Question`: #{settings[:current_question]}\n"\
-        "`Archive Mode`: #{settings[:archive] ? 'Enabled' : 'Disabled'}\n"
+        "`Archive Mode`: #{settings[:archive] ? 'Enabled' : 'Disabled'}\n"\
         "`Debug Mode`: #{settings[:debug_mode] ? 'Enabled' : 'Disabled'}\n"
       event.respond(settings_info)
     end
