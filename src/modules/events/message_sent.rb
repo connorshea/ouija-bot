@@ -177,15 +177,8 @@ module Bot::DiscordEvents
           "Ouija says **#{completed_message_array.join.upcase}**"
         )
 
-        # Pin the goodbye message or handle the error if one occurs.
-        begin
-          game_over_message.pin
-        rescue RestClient::BadRequest => ex
-          data = JSON.parse(ex.response.body)
-          if Discordrb::Errors.error_class_for(data['code']) == Discordrb::Errors::PinLimitReached
-            event.channel.send_message("Pin limit reached (only 50 are allowed per channel), we can't pin this message! Please create a new Ouija channel or unpin some of the existing messages.")
-          end
-        end
+        # Either pin the final game result or post it in a #ouija-archives channel.
+        handle_game_over_message(event, game_over_message)
 
         # Disable the bot.
         command_event = Discordrb::Commands::CommandEvent.new(game_over_message, event.bot)
@@ -312,6 +305,42 @@ module Bot::DiscordEvents
         Bot::Database::Settings.create(guild_id: event.server.id, delete_all: false)
       end
       event.send_temporary_message("Delete all mode is disabled.", 5)
+    end
+
+    def self.handle_game_over_message(event, game_over_message)
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+
+      if settings[:archive] == false
+        # Pin the goodbye message or handle the error if one occurs.
+        begin
+          game_over_message.pin
+        rescue RestClient::BadRequest => ex
+          data = JSON.parse(ex.response.body)
+          if Discordrb::Errors.error_class_for(data['code']) == Discordrb::Errors::PinLimitReached
+            event.channel.send_message(
+              "Pin limit reached (only 50 are allowed per channel), we can't pin"\
+                " this message! Please create a new Ouija channel or unpin some of the"\
+                " existing messages. Alternatively, you can enable Archive mode so the"\
+                " bot will post the final message in an archives channel instead."
+            )
+          end
+        end
+      elsif settings[:archive] == true
+        archives_channel = event.server.text_channels.find { |channel| channel.name == "ouija-archives" }
+
+        if archives_channel.nil?
+          event.channel.send_message("There's no channel named `ouija-archives`, please create one in order for Archive mode to work.")
+        end
+
+        game_over_message_link = "https://discordapp.com/channels/#{event.server.id}/#{game_over_message.channel.id}/#{game_over_message.id}"
+
+        unless archives_channel.nil?
+          archives_channel.send_message(
+            "Link: #{game_over_message_link}\n"\
+              "#{game_over_message.text.gsub(/^Game over!\ /, '')}"
+          )
+        end
+      end
     end
   end
 end

@@ -10,6 +10,7 @@ module Bot::DiscordCommands
         "`Ouija Mode`: #{settings[:enabled] ? 'Enabled' : 'Disabled'}\n"\
         "`Delete All Mode`: #{settings[:delete_all] ? 'Enabled' : 'Disabled'}\n"\
         "`Current Question`: #{settings[:current_question]}\n"\
+        "`Archive Mode`: #{settings[:archive] ? 'Enabled' : 'Disabled'}\n"\
         "`Debug Mode`: #{settings[:debug_mode] ? 'Enabled' : 'Disabled'}\n"
       event.respond(settings_info)
     end
@@ -35,6 +36,42 @@ module Bot::DiscordCommands
       end
 
       event.channel.send_message("Ouija mode is enabled.")
+    end
+
+    command(:enable_archive, description: "Enables Archive mode. Only available for users with the ability to manage channels.") do |event|
+      # Only allow this command if the user that triggered the event can manage
+      # channels in this server.
+      unless event.user.permission?(:manage_channels)
+        event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Archive mode.", 5)
+        break
+      end
+
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(archive: true)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, archive: true)
+      end
+
+      event.channel.send_message("Archive mode is enabled.")
+    end
+
+    command(:disable_archive, description: "Disables Archive mode. Only available for users with the ability to manage channels.") do |event|
+      # Only allow this command if the user that triggered the event can manage
+      # channels in this server.
+      unless event.user.permission?(:manage_channels)
+        event.channel.send_temporary_message("You don't have the permissions to do this. Only users who are able to manage channels can enable/disable Archive mode.", 5)
+        break
+      end
+
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(archive: false)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, archive: false)
+      end
+
+      event.channel.send_message("Archive mode is disabled.")
     end
 
     command(:disable, description: "Disables Ouija mode. Only available for users with the ability to manage channels.") do |event|

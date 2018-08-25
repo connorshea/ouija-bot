@@ -5,8 +5,8 @@ client_id_environment_variable: "DISCORD_CLIENT_ID"
 # Discord API client token environment variable
 token_environment_variable: "DISCORD_TOKEN"
 
-# Command prefix
-prefix: "ouija!"
+# Command prefix environment variable
+prefix_environment_variable: "OUIJA_PREFIX"
 
 # ID of bot owner
 owner: 151162710757867521

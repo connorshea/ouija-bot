@@ -18,7 +18,7 @@ module Bot
   # can access the cache anywhere.
   BOT = Discordrb::Commands::CommandBot.new(client_id: ENV[CONFIG.client_id_environment_variable.to_s],
                                             token: ENV[CONFIG.token_environment_variable.to_s],
-                                            prefix: CONFIG.prefix)
+                                            prefix: ENV[CONFIG.prefix_environment_variable.to_s] || "ouija!")
 
   # This class method wraps the module lazy-loading process of discordrb command
   # and event modules. Any module name passed to this method will have its child
