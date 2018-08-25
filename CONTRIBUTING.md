@@ -14,6 +14,7 @@ The `.env` file should look like this:
 DISCORD_TOKEN=NDU0NDA3Mzk2MzQxODQxOTY3.DftMXw.Scfd1sM2rEGWNSnbOquqcWmmnxY
 # Replace the ID number with the client ID for your instance of the Discord bot.
 DISCORD_CLIENT_ID=454407396341841967
+OUIJA_PREFIX=ouija!
 ```
 
 - Enter the postgres CLI with `psql` and run `CREATE DATABASE ouijabot;`, this should create the database.
