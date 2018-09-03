@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/meew0/discordrb
-  revision: 755be83d1db9fadf958c358d1e6c632c79860a47
+  revision: ec5f69ba2030deab43c775f4d216097852798168
   specs:
     discordrb (3.2.1)
       discordrb-webhooks (~> 3.2.0.1)
