@@ -20,6 +20,8 @@ module Bot
                                             token: ENV[CONFIG.token_environment_variable.to_s],
                                             prefix: ENV[CONFIG.prefix_environment_variable.to_s] || "ouija!")
 
+  Discordrb::LOGGER.debug = ENV['DISCORDRB_DEBUG_LOGGING'] || false
+
   # This class method wraps the module lazy-loading process of discordrb command
   # and event modules. Any module name passed to this method will have its child
   # constants iterated over and passed to `Discordrb::Commands::CommandBot#include!`
