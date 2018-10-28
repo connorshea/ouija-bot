@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'discordrb', github: "meew0/discordrb"
+gem 'discordrb', '~> 3.3'
 gem 'dotenv', '~> 2.5.0'
 gem 'sequel', '~> 5.13.0'
 gem 'pg', '~> 1.1'
