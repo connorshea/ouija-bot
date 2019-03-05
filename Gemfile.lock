@@ -53,7 +53,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
-    unicode-display_width (1.4.1)
+    unicode-display_width (1.5.0)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
