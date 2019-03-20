@@ -18,7 +18,8 @@ module Bot
   # can access the cache anywhere.
   BOT = Discordrb::Commands::CommandBot.new(client_id: ENV[CONFIG.client_id_environment_variable.to_s],
                                             token: ENV[CONFIG.token_environment_variable.to_s],
-                                            prefix: ENV[CONFIG.prefix_environment_variable.to_s] || "ouija!")
+                                            prefix: ENV[CONFIG.prefix_environment_variable.to_s] || "ouija!",
+                                            compress_mode: :large)
 
   Discordrb::LOGGER.debug = ENV['DISCORDRB_DEBUG_LOGGING'] || false
 
