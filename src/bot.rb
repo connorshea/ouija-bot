@@ -20,6 +20,8 @@ module Bot
                                             token: ENV[CONFIG.token_environment_variable.to_s],
                                             prefix: ENV[CONFIG.prefix_environment_variable.to_s] || "ouija!",
                                             compress_mode: :large)
+  # Workaround this issue: https://github.com/meew0/discordrb/issues/600
+  BOT.gateway.check_heartbeat_acks = false
 
   Discordrb::LOGGER.debug = ENV['DISCORDRB_DEBUG_LOGGING'] || false
 
