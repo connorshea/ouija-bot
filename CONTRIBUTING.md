@@ -1,7 +1,7 @@
 # Contributing
 ## Development
 
-To start, you'll need Ruby and Postgres.
+To start, you'll need Ruby 2.6 and Postgres.
 
 - `gem install bundler`
 - `bundle install` to install dependencies

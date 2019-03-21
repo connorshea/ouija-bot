@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Changed
+- Upgrade to Ruby 2.6 and Bundler 2.0 ([#95])
+
+### Fixed
+- Fixed the bot getting stuck in a boot loop. ([#93])
+- Fixed an implicit conversion of `nil` to `String`. ([#94])
 
 ## [1.1.0] - 2018-11-11
 ### Added
@@ -48,6 +53,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [#34]: https://github.com/connorshea/ouija-bot/pull/34
 [#44]: https://github.com/connorshea/ouija-bot/pull/44
 [#66]: https://github.com/connorshea/ouija-bot/pull/66
+[#93]: https://github.com/connorshea/ouija-bot/pull/93
+[#94]: https://github.com/connorshea/ouija-bot/pull/94
+[#95]: https://github.com/connorshea/ouija-bot/pull/95
 
 [Unreleased]: https://github.com/connorshea/ouija-bot/compare/v1.1.0...HEAD
 [1.1.0]: https://github.com/connorshea/ouija-bot/compare/v1.0.0...v1.1.0
