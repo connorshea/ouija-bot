@@ -9,6 +9,7 @@ cache:
     - vendor/bundle
     - $HOME/.rvm/gems
 before_script:
+  - gem install bundler:2.0
   - bundle install
 script:
   - bundle exec rubocop
