@@ -169,9 +169,7 @@ module Bot::DiscordEvents
 
         settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
         first_line = "Game over! "
-        if settings[:current_question].chomp(" ") != ""
-          first_line << "Question: **#{settings[:current_question]}**\n"
-        end
+        first_line << "Question: **#{settings[:current_question]}**\n" if settings[:current_question].chomp(" ") != ""
         game_over_message = event.channel.send_message(
           "#{first_line}"\
           "Ouija says **#{completed_message_array.join.upcase}**"
@@ -256,12 +254,15 @@ module Bot::DiscordEvents
     # - from the current bot
     # - is a bot command
     def self.message_checks(msg)
+      config_prefix_check = false
+      config_prefix_check = msg.content.start_with?(Bot::CONFIG.prefix) unless Bot::CONFIG.prefix.nil?
+
       return (
         message_checks_limit_characters(msg) ||
         msg.content.capitalize == "Goodbye" ||
         msg.content.capitalize == "Space" ||
         msg.author.current_bot? ||
-        msg.content.start_with?(Bot::CONFIG.prefix)
+        config_prefix_check
       )
     end
 
@@ -328,9 +329,7 @@ module Bot::DiscordEvents
       elsif settings[:archive] == true
         archives_channel = event.server.text_channels.find { |channel| channel.name == "ouija-archives" }
 
-        if archives_channel.nil?
-          event.channel.send_message("There's no channel named `ouija-archives`, please create one in order for Archive mode to work.")
-        end
+        event.channel.send_message("There's no channel named `ouija-archives`, please create one in order for Archive mode to work.") if archives_channel.nil?
 
         game_over_message_link = "https://discordapp.com/channels/#{event.server.id}/#{game_over_message.channel.id}/#{game_over_message.id}"
 
