@@ -27,7 +27,7 @@ GEM
     opus-ruby (1.0.1)
       ffi
     parallel (1.17.0)
-    parser (2.6.0.0)
+    parser (2.6.2.0)
       ast (~> 2.4.0)
     pg (1.1.4)
     powerpack (0.1.2)
