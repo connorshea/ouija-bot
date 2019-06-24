@@ -126,5 +126,21 @@ module Bot::DiscordCommands
 
       event.channel.send_message("Debug mode is disabled.")
     end
+
+    # Escape hatch in case things really break.
+    command(:disable_delete_all, help_available: false, description: "Disables delete all mode.") do |event|
+      break unless event.user.id == Bot::CONFIG.owner
+
+      # Set `delete_all` to false.
+      # If there's no row in the database for this server, create one.
+      settings = Bot::Database::Settings.find(guild_id: event.server.id)
+      if settings
+        settings.update(delete_all: false)
+      else
+        Bot::Database::Settings.create(guild_id: event.server.id, delete_all: false)
+      end
+
+      event.channel.send_message("Delete all mode is disabled.")
+    end
   end
 end
