@@ -175,8 +175,15 @@ module Bot::DiscordEvents
           "Ouija says **#{completed_message_array.join.upcase}**"
         )
 
-        # Either pin the final game result or post it in a #ouija-archives channel.
-        handle_game_over_message(event, game_over_message)
+        begin
+          # Either pin the final game result or post it in a #ouija-archives channel.
+          handle_game_over_message(event, game_over_message)
+        rescue Discordrb::Errors::NoPermission => e
+          # Catch a permissions error and send a message about the problem.
+          error = settings[:archive] == true ? "post in #ouija-archives." : "pin the message."
+          event.channel.send_message("Insufficient permissions, unable to #{error}")
+          puts "ERROR: #{e.inspect}"
+        end
 
         # Disable the bot.
         command_event = Discordrb::Commands::CommandEvent.new(game_over_message, event.bot)
