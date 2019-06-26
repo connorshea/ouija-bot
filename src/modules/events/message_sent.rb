@@ -322,7 +322,7 @@ module Bot::DiscordEvents
         # Pin the goodbye message or handle the error if one occurs.
         begin
           game_over_message.pin
-        rescue RestClient::BadRequest => e
+        rescue RestClient::BadRequest => _e
           data = JSON.parse(ex.response.body)
           if Discordrb::Errors.error_class_for(data['code']) == Discordrb::Errors::PinLimitReached
             event.channel.send_message(
