@@ -39,7 +39,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rubocop (0.72.0)
+    rubocop (0.73.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -65,7 +65,7 @@ DEPENDENCIES
   dotenv (~> 2.7.4)
   pg (~> 1.1)
   rake (~> 12.3)
-  rubocop (~> 0.72)
+  rubocop (~> 0.73)
   sequel (~> 5.21.0)
 
 BUNDLED WITH
