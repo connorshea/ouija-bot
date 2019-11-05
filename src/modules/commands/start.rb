@@ -18,7 +18,7 @@ module Bot::DiscordCommands
 
       # Don't allow starting a new question while in the 'delete all' mode.
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
-      break if (settings[:delete_all])
+      break if settings[:delete_all]
 
       # Send a message so we can create a CommandEvent with a message from the bot.
       start_message = event.channel.send_message("Starting a new game of Ouija...")
