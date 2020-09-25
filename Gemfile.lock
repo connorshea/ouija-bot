@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.0)
+    ast (2.4.1)
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
       ffi (>= 1.9.24)
@@ -27,8 +27,8 @@ GEM
     opus-ruby (1.0.1)
       ffi
     parallel (1.17.0)
-    parser (2.6.3.0)
-      ast (~> 2.4.0)
+    parser (2.7.1.5)
+      ast (~> 2.4.1)
     pg (1.1.4)
     rainbow (3.0.0)
     rake (12.3.3)
