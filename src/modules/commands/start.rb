@@ -45,9 +45,10 @@ module Bot::DiscordCommands
     end
 
     command(
-      %i[startwithquestion startq],
+      :startwithquestion,
       description: "Starts a new game of Ouija with a question chosen from a predetermined list.",
-      usage: "startwithquestion"
+      usage: "startwithquestion",
+      aliases: [:startq]
     ) do |event|
       # Only allow this command in a channel named ouija.
       unless event.channel.name == "ouija"
