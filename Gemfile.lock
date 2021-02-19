@@ -1,40 +1,37 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.0)
-    discordrb (3.3.0)
-      discordrb-webhooks (~> 3.3.0)
+    ast (2.4.2)
+    discordrb (3.4.2)
+      discordrb-webhooks (~> 3.4.2)
       ffi (>= 1.9.24)
       opus-ruby
-      rbnacl (~> 3.4.0)
-      rest-client (>= 2.1.0.rc1)
+      rest-client (>= 2.0.0)
       websocket-client-simple (>= 0.3.0)
-    discordrb-webhooks (3.3.0)
-      rest-client (>= 2.1.0.rc1)
-    domain_name (0.5.20180417)
+    discordrb-webhooks (3.4.2)
+      rest-client (>= 2.0.0)
+    domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
     event_emitter (0.2.6)
-    ffi (1.11.1)
+    ffi (1.14.2)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    jaro_winkler (1.5.3)
-    mime-types (3.2.2)
+    jaro_winkler (1.5.4)
+    mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2019.0331)
+    mime-types-data (3.2021.0212)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
-    parallel (1.17.0)
-    parser (2.6.3.0)
-      ast (~> 2.4.0)
-    pg (1.1.4)
+    parallel (1.20.1)
+    parser (3.0.0.0)
+      ast (~> 2.4.1)
+    pg (1.2.3)
     rainbow (3.0.0)
     rake (13.0.3)
-    rbnacl (3.4.0)
-      ffi
-    rest-client (2.1.0.rc1)
+    rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -46,13 +43,13 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    ruby-progressbar (1.10.1)
+    ruby-progressbar (1.11.0)
     sequel (5.21.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.6)
-    unicode-display_width (1.6.0)
-    websocket (1.2.8)
+    unf_ext (0.0.7.7)
+    unicode-display_width (1.6.1)
+    websocket (1.2.9)
     websocket-client-simple (0.3.0)
       event_emitter
       websocket
@@ -61,12 +58,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  discordrb (~> 3.3)
+  discordrb (~> 3.4)
   dotenv (~> 2.7.6)
   pg (~> 1.1)
   rake (~> 13.0)
-  rubocop (~> 0.72)
+  rubocop (~> 0.72.0)
   sequel (~> 5.21.0)
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
