@@ -65,5 +65,8 @@ DEPENDENCIES
   rubocop (~> 0.72.0)
   sequel (~> 5.21.0)
 
+RUBY VERSION
+   ruby 2.7.2p137
+
 BUNDLED WITH
    1.17.3
