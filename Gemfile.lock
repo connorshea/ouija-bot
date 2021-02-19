@@ -11,7 +11,7 @@ GEM
       websocket-client-simple (>= 0.3.0)
     discordrb-webhooks (3.3.0)
       rest-client (>= 2.1.0.rc1)
-    domain_name (0.5.20180417)
+    domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
     event_emitter (0.2.6)
@@ -50,7 +50,7 @@ GEM
     sequel (5.21.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.6)
+    unf_ext (0.0.7.7)
     unicode-display_width (1.6.0)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
