@@ -11,7 +11,11 @@ module Bot::DiscordCommands
       begin
         response = eval code.join(' ')
         # Truncate so the response will always be within the allowed length.
-        response.length > 1995 ? "#{response.inspect[0...1995]}..." : response.inspect
+        if response.respond_to?(:length)
+          response.length > 1995 ? "#{response.inspect[0...1995]}..." : response.inspect
+        else
+          response
+        end
       rescue => e
         # If the error is larger than 1950 characters, truncate it.
         "An error occurred 😞 ```#{e.inspect.length > 1950 ? "#{e.inspect[0...1950]}..." : e.inspect}```"
