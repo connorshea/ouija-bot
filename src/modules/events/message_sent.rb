@@ -22,7 +22,7 @@ module Bot::DiscordEvents
 
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all mode is enabled.", 5)
-        event.message.delete
+        event.message.delete if event.message
       end
 
       # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
