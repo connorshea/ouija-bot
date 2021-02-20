@@ -8,23 +8,25 @@ module Bot::DiscordEvents
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
       # If the `enabled` setting is set to false, break out of this block early.
       next unless settings[:enabled]
+      # Stupid hack to avoid using `next`/`return`.
+      message_deleted = false
 
       # If the message fails the message checks, delete the message and send
       # a warning.
       unless message_checks(event.message)
         # Delete the message
-        event.message.delete if event.message
+        event.message.delete if event.message && !message_deleted
+        message_deleted = true
         # Wait 3 seconds and then delete the warning message.
         event.channel.send_temporary_message('Only one character messages, "Space", or "Goodbye" are allowed.', 3)
-        next
       end
 
       successive_messages = check_for_successive_messages(event)
 
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all mode is enabled.", 5)
-        event.message.delete if event.message
-        next
+        event.message.delete if event.message && !message_deleted
+        message_deleted = true
       end
 
       # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
