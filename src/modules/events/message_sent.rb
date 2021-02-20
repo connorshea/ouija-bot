@@ -16,6 +16,7 @@ module Bot::DiscordEvents
         event.message.delete if event.message
         # Wait 3 seconds and then delete the warning message.
         event.channel.send_temporary_message('Only one character messages, "Space", or "Goodbye" are allowed.', 3)
+        return
       end
 
       successive_messages = check_for_successive_messages(event)
@@ -23,6 +24,7 @@ module Bot::DiscordEvents
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all mode is enabled.", 5)
         event.message.delete if event.message
+        return
       end
 
       # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
