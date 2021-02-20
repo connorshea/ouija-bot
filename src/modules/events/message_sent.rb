@@ -8,6 +8,7 @@ module Bot::DiscordEvents
       settings = Bot::Database::Settings.find_or_create(guild_id: event.server.id)
       # If the `enabled` setting is set to false, break out of this block early.
       next unless settings[:enabled]
+
       # Stupid hack to avoid using `next`/`return`.
       message_deleted = false
 
@@ -26,7 +27,6 @@ module Bot::DiscordEvents
       if settings[:delete_all] && !event.message.author.current_bot?
         event.channel.send_temporary_message("Delete all mode is enabled.", 5)
         event.message.delete if event.message && !message_deleted
-        message_deleted = true
       end
 
       # Disable Goodbye handling if delete_all is enabled or if the goodbye is a
@@ -326,8 +326,8 @@ module Bot::DiscordEvents
         # Pin the goodbye message or handle the error if one occurs.
         begin
           game_over_message.pin
-        rescue RestClient::BadRequest => ex
-          data = JSON.parse(ex.response.body)
+        rescue RestClient::BadRequest => e
+          data = JSON.parse(e.response.body)
           if Discordrb::Errors.error_class_for(data['code']) == Discordrb::Errors::PinLimitReached
             event.channel.send_message(
               "Pin limit reached (only 50 are allowed per channel), we can't pin"\
