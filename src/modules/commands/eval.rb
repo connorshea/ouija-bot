@@ -11,7 +11,8 @@ module Bot::DiscordCommands
       begin
         eval code.join(' ')
       rescue => e
-        "An error occurred 😞 ```#{e}```"
+        # If the error is larger than 1950 characters, truncate it.
+        "An error occurred 😞 ```#{e.inspect.length > 1950 ? "#{e.inspect[0...1950]}..." : e.inspect}```"
       end
     end
   end
