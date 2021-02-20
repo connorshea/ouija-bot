@@ -9,7 +9,9 @@ module Bot::DiscordCommands
       break unless event.user.id == Bot::CONFIG.owner
 
       begin
-        eval code.join(' ')
+        response = eval code.join(' ')
+        # Truncate so the response will always be within the allowed length.
+        response.length > 1995 ? "#{response.inspect[0...1995]}..." : response.inspect
       rescue => e
         # If the error is larger than 1950 characters, truncate it.
         "An error occurred 😞 ```#{e.inspect.length > 1950 ? "#{e.inspect[0...1950]}..." : e.inspect}```"
