@@ -13,6 +13,9 @@ module Bot::DiscordCommands
         # Truncate so the response will always be within the allowed length.
         if response.respond_to?(:length)
           response.length > 1995 ? "#{response.inspect[0...1995]}..." : response.inspect
+        # Handle nil so we send something in the case that the response is nil.
+        elsif response.nil?
+          'nil'
         else
           response
         end
